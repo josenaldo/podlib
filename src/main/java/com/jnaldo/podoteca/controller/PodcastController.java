@@ -10,7 +10,7 @@ public class PodcastController {
 	@RequestMapping("/")
 	public String listPodcasts(Model model) {
 
-		model.addAttribute("message", "Eu escuto o Nerdcast!");
+		model.addAttribute("message", "Lambda, lambda, lambda, Nerds!");
 
 		return "index";
 	}
