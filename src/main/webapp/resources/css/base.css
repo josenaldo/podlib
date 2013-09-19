@@ -1,0 +1,11 @@
+body {
+	padding-top: 50px;
+}
+
+.dashboard {
+	margin-top: 50px;
+}
+
+.dashboard-item i{
+	font-size: 128px;
+}
