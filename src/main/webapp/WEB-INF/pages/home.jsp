@@ -5,20 +5,29 @@
 	<div class="container column-center dashboard">
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<i class="icon-rss-sign"></i>
-				<p>Podcasts</p>
+				<a href="podcast" class="dashboard-link">
+					<i class="icon-rss-sign"></i>
+					<br /> 
+					<span>Podcasts</span>
+				</a>
 			</div>
 		</div>
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<i class="icon-volume-up"></i>
-				<P>Episódios</P>
+				<a href="episodio"  class="dashboard-link">
+					<i class="icon-volume-up"></i> 
+					<br /> 
+					<span>Episódios</span>
+				</a>
 			</div>
 		</div>
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<i class="icon-group"></i>
-				<P>Participantes</P>
+				<a href="participante"  class="dashboard-link">
+					<i class="icon-group"></i>
+					<br />
+					<span>Participantes</span>
+				</a>
 			</div>
 		</div>
 	</div>

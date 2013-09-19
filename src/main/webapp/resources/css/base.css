@@ -9,3 +9,7 @@ body {
 .dashboard-item i{
 	font-size: 128px;
 }
+
+ .dashboard-link, .dashboard-link:hover {
+ 	text-decoration: none;
+ }
