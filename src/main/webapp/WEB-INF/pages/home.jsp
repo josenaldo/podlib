@@ -7,7 +7,7 @@
 	<div class="container column-center dashboard">
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<a href="podcast" class="dashboard-link">
+				<a href="podcasts" class="dashboard-link">
 					<i class="icon-rss-sign"></i>
 					<br /> 
 					<span>Podcasts</span>
@@ -16,7 +16,7 @@
 		</div>
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<a href="episodio"  class="dashboard-link">
+				<a href="episodios"  class="dashboard-link">
 					<i class="icon-volume-up"></i> 
 					<br /> 
 					<span>Episódios</span>
@@ -25,7 +25,7 @@
 		</div>
 		<div class="col-lg-4 dashboard-item">
 			<div class="panel panel-default">
-				<a href="participante"  class="dashboard-link">
+				<a href="participantes"  class="dashboard-link">
 					<i class="icon-group"></i>
 					<br />
 					<span>Participantes</span>

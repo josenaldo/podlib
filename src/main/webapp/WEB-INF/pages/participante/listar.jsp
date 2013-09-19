@@ -21,6 +21,6 @@
 	</c:forEach>
 </table>
 
-<a href="${contextPath}/participante/adicionar" class="btn btn-primary">
+<a href="${contextPath}/participantes/adicionar" class="btn btn-primary">
 	<i class="icon-plus"></i> Adicionar
 </a>

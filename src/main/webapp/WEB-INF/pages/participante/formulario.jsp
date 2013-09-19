@@ -34,7 +34,7 @@
 			</div>
 		</div>
 		<div class="panel-footer right">			
-			<a href="${contextPath}/participante" class="btn btn-default">Cancelar</a>
+			<a href="${contextPath}/participantes" class="btn btn-default">Cancelar</a>
 			<input type="submit" class="btn btn-primary" value="Salvar">
 		</div>
 

@@ -6,14 +6,15 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.jnaldo.podoteca.domain.Podcast;
 
 @Controller
-@RequestMapping("podcast")
+@RequestMapping("podcasts")
 public class PodcastController {
 
-	@RequestMapping(value = "")
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String listarPodcasts(Model model) {
 
 		List<Podcast> podcasts = new ArrayList<Podcast>();
@@ -49,18 +50,28 @@ public class PodcastController {
 		return "podcast/formulario";
 	}
 
-	@RequestMapping("editar")
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	public String salvarPodcast() {
+		return "redirect:";
+	}
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
+	public String mostraPodcast() {
+		return "podcast/visualizar";
+	}
+
+	@RequestMapping("/{id}/editar")
 	public String editarPodcast(Model model) {
 		model.addAttribute("acao", "Editar");
 		return "podcast/formulario";
 	}
 
-	@RequestMapping("salvar")
-	public String salvarPodcast() {
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	public String atualizarPodcast() {
 		return "redirect:";
 	}
 
-	@RequestMapping("remover")
+	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String removerPodcast() {
 		return "redirect:";
 	}

@@ -22,7 +22,7 @@
 	</c:forEach>
 </table>
 
-<a href="${contextPath}/podcast/adicionar" class="btn btn-primary">
+<a href="${contextPath}/podcasts/adicionar" class="btn btn-primary">
 	<i class="icon-plus"></i> Adicionar
 </a>
 	

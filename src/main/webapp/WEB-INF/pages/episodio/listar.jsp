@@ -19,6 +19,6 @@
 	</c:forEach>
 </table>
 
-<a href="${contextPath}/episodio/adicionar" class="btn btn-primary">
+<a href="${contextPath}/episodios/adicionar" class="btn btn-primary">
 	<i class="icon-plus"></i> Adicionar
 </a>

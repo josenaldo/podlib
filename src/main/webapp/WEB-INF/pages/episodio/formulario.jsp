@@ -26,7 +26,7 @@
 			</div>
 		</div>
 		<div class="panel-footer right">			
-			<a href="${contextPath}/episodio" class="btn btn-default">Cancelar</a>
+			<a href="${contextPath}/episodios" class="btn btn-default">Cancelar</a>
 			<input type="submit" class="btn btn-primary" value="Salvar">
 		</div>
 

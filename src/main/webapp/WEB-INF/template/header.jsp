@@ -51,24 +51,24 @@
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Podcasts<b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="${contextPath}/podcast">Lista</a></li>	
-						<li><a href="${contextPath}/podcast/adicionar">Adicionar</a></li>							
+						<li><a href="${contextPath}/podcasts">Lista</a></li>	
+						<li><a href="${contextPath}/podcasts/adicionar">Adicionar</a></li>							
 					</ul>
 				</li>
 				
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Episódios<b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="${contextPath}/episodio">Lista</a></li>	
-						<li><a href="${contextPath}/episodio/adicionar">Adicionar</a></li>							
+						<li><a href="${contextPath}/episodios">Lista</a></li>	
+						<li><a href="${contextPath}/episodios/adicionar">Adicionar</a></li>							
 					</ul>
 				</li>
 				
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Participantes<b class="caret"></b></a>
 					<ul class="dropdown-menu" role="menu">
-						<li><a href="${contextPath}/participante">Lista</a></li>	
-						<li><a href="${contextPath}/participante/adicionar">Adicionar</a></li>							
+						<li><a href="${contextPath}/participantes">Lista</a></li>	
+						<li><a href="${contextPath}/participantes/adicionar">Adicionar</a></li>							
 					</ul>
 				</li>				
 			</ul>
