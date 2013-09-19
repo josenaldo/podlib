@@ -6,7 +6,7 @@ public class Episodio {
 
 	private String titulo;
 	private String descricao;
-	private String urlDoArquivo;
+	private String url;
 
 	private List<Participante> participantes;
 
@@ -26,12 +26,12 @@ public class Episodio {
 		this.descricao = descricao;
 	}
 
-	public String getUrlDoArquivo() {
-		return this.urlDoArquivo;
+	public String getUrl() {
+		return this.url;
 	}
 
-	public void setUrlDoArquivo(String urlDoArquivo) {
-		this.urlDoArquivo = urlDoArquivo;
+	public void setUrl(String url) {
+		this.url = url;
 	}
 
 	public List<Participante> getParticipantes() {

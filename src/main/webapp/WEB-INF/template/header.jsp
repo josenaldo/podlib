@@ -1,5 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> 
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -34,7 +36,7 @@
 <header>	
 	
 	<!-- Navbar -->
-	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
 				<span class="icon-bar"></span>
@@ -45,17 +47,34 @@
 		</div>
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse">					
-			<ul class="nav navbar-nav">
-				<li>
-					<a href="${contextPath}/podcast">Podcast</a>
+			<ul class="nav navbar-nav">				
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Podcasts<b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="${contextPath}/podcast">Lista</a></li>	
+						<li><a href="${contextPath}/podcast/adicionar">Adicionar</a></li>							
+					</ul>
 				</li>
-				<li>
-					<a href="${contextPath}/episodio">Episódios</a>
+				
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Episódios<b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="${contextPath}/episodio">Lista</a></li>	
+						<li><a href="${contextPath}/episodio/adicionar">Adicionar</a></li>							
+					</ul>
 				</li>
-				<li>
-					<a href="${contextPath}/participante">Participantes</a>
-				</li>
+				
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle"	data-toggle="dropdown">Participantes<b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="${contextPath}/participante">Lista</a></li>	
+						<li><a href="${contextPath}/participante/adicionar">Adicionar</a></li>							
+					</ul>
+				</li>				
 			</ul>
 		</div>
-	</div>
+	</nav>
 </header>
+
+<div class="row-container">
+	<div class="container column-center">

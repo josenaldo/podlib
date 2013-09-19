@@ -17,14 +17,15 @@ public class EpisodioController {
 	}
 
 	@RequestMapping("adicionar")
-	public String adicionarepisodio() {
-
-		return "episodio/adicionar";
+	public String adicionarepisodio(Model model) {
+		model.addAttribute("acao", "Adicionar");
+		return "episodio/formulario";
 	}
 
 	@RequestMapping("editar")
-	public String editarepisodio() {
-		return "episodio/editar";
+	public String editarepisodio(Model model) {
+		model.addAttribute("acao", "Editar");
+		return "episodio/formulario";
 	}
 
 	@RequestMapping("salvar")

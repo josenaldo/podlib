@@ -1,5 +1,5 @@
 body {
-	padding-top: 50px;
+	padding-bottom: 50px;
 }
 
 .dashboard {
@@ -12,4 +12,9 @@ body {
 
  .dashboard-link, .dashboard-link:hover {
  	text-decoration: none;
+ }
+ 
+ .form-panel {
+ 	width: 50%;
+ 	margin: auto;
  }

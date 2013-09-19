@@ -13,7 +13,7 @@ import com.jnaldo.podoteca.domain.Podcast;
 @RequestMapping("podcast")
 public class PodcastController {
 
-	@RequestMapping("")
+	@RequestMapping(value = "")
 	public String listarPodcasts(Model model) {
 
 		List<Podcast> podcasts = new ArrayList<Podcast>();
@@ -43,14 +43,16 @@ public class PodcastController {
 	}
 
 	@RequestMapping("adicionar")
-	public String adicionarPodcast() {
+	public String adicionarPodcast(Model model) {
 
-		return "podcast/adicionar";
+		model.addAttribute("acao", "Adicionar");
+		return "podcast/formulario";
 	}
 
 	@RequestMapping("editar")
-	public String editarPodcast() {
-		return "podcast/editar";
+	public String editarPodcast(Model model) {
+		model.addAttribute("acao", "Editar");
+		return "podcast/formulario";
 	}
 
 	@RequestMapping("salvar")

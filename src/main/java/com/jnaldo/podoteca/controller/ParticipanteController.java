@@ -17,14 +17,15 @@ public class ParticipanteController {
 	}
 
 	@RequestMapping("adicionar")
-	public String adicionarparticipante() {
-
-		return "participante/adicionar";
+	public String adicionarparticipante(Model model) {
+		model.addAttribute("acao", "Adicionar");
+		return "participante/formulario";
 	}
 
 	@RequestMapping("editar")
-	public String editarparticipante() {
-		return "participante/editar";
+	public String editarparticipante(Model model) {
+		model.addAttribute("acao", "Editar");
+		return "participante/formulario";
 	}
 
 	@RequestMapping("salvar")
