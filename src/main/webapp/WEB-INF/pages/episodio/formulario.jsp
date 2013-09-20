@@ -2,28 +2,35 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
+ <c:choose>
+        <c:when test="${episodio.novo}">
+        	<c:set var="metodo" value="POST"/>
+        	<c:set var="acao" value="Adicionar"/>
+        </c:when>
+        <c:otherwise>        	
+        	<c:set var="metodo" value="PUT"/>
+        	<c:set var="acao" value="Editar"/>
+        </c:otherwise>
+</c:choose>
 <h1>${acao} episódio</h1>
 
-<form action="${contextPath}/episodios" method="post">
+<form:form method="${metodo}" id="episodio-form" 
+	commandName="episodio"
+	action="${contextPath}/episodios/${episodio.id}">
+ 
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
-			<div class="form-group">
-				<label for="title">Título</label> 
-				<input type="text" id="title"
-					class="form-control" 
-					placeholder="Digite o título do episódio">
-			</div>
-			<div class="form-group">
-				<label for="descricao">Descrição</label>
-				<textarea class="form-control" id="descricao"
-					rows="4" placeholder="Digite a descrição do episódio"></textarea>
-			</div>
-			<div class="form-group">
-				<label for="url">URL</label> 
-				<input type="text" class="form-control" id="url"
-					placeholder="Digite a url do episódio">
-			</div>
+		
+			<t:input path="titulo" label="Título" placeholder="Digite o título do episódio" required="true" />
+			
+			<t:textarea path="descricao" label="Descrição" placeholder="Digite a descrição do episódio" required="true" rows="4"/>
+			
+			<t:input path="url" label="URL" placeholder="Digite a url do episódio. Exemplo: 'http://jnaldo.com/podcast/ep01'" required="true" />
+		
 		</div>
 		<div class="panel-footer right">			
 			<a href="${contextPath}/episodios" class="btn btn-default">Cancelar</a>
@@ -31,4 +38,5 @@
 		</div>
 
 	</div>
-</form>
+</form:form>
+

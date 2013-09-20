@@ -3,8 +3,11 @@ package com.jnaldo.podoteca.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,13 +63,21 @@ public class PodcastController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String salvarPodcast(@ModelAttribute("podcast") Podcast podcast,
-			RedirectAttributes attr) {
+	public String salvarPodcast(
+			@Valid @ModelAttribute("podcast") Podcast podcast,
+			BindingResult result, RedirectAttributes attr, Model model) {
 
-		attr.addFlashAttribute("mensagem", "Podcast " + podcast.getNome()
-				+ " adicionado com sucesso");
-		attr.addFlashAttribute("tipoDaMensagem", "success");
-		return "redirect:/podcasts";
+		if (result.hasErrors()) {
+			model.addAttribute("mensagem", "Verifique os erros no formulário.");
+			model.addAttribute("tipoDaMensagem", "danger");
+			model.addAttribute("podcast", podcast);
+			return "podcast/formulario";
+		} else {
+			attr.addFlashAttribute("mensagem", "Podcast " + podcast.getNome()
+					+ " adicionado com sucesso");
+			attr.addFlashAttribute("tipoDaMensagem", "success");
+			return "redirect:/podcasts";
+		}
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -97,13 +108,22 @@ public class PodcastController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
 	public String atualizarPodcast(@PathVariable("id") Long id,
-			@ModelAttribute("podcast") Podcast podcast, RedirectAttributes attr) {
+			@Valid @ModelAttribute("podcast") Podcast podcast,
+			BindingResult result, RedirectAttributes attr, Model model) {
 
-		attr.addFlashAttribute("mensagem", "Podcast " + podcast.getNome()
-				+ " editado com sucesso");
-		attr.addFlashAttribute("tipoDaMensagem", "success");
+		if (result.hasErrors()) {
+			model.addAttribute("mensagem", "Verifique os erros no formulário.");
+			model.addAttribute("tipoDaMensagem", "danger");
 
-		return "redirect:/podcasts";
+			model.addAttribute("podcast", podcast);
+			return "podcast/formulario";
+		} else {
+			attr.addFlashAttribute("mensagem", "Podcast " + podcast.getNome()
+					+ " editado com sucesso");
+			attr.addFlashAttribute("tipoDaMensagem", "success");
+
+			return "redirect:/podcasts";
+		}
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)

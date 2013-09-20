@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
  <c:choose>
         <c:when test="${podcast.novo}">
@@ -15,29 +18,19 @@
 </c:choose>
 <h1>${acao} podcast</h1>
 
-<form action="${contextPath}/podcasts/${podcast.id}" method="post" id="podcast">
-	<input type="hidden" name="_method" value="${metodo}"/> 
+<form:form method="${metodo}" id="podcast-form" 
+	commandName="podcast"
+	action="${contextPath}/podcasts/${podcast.id}">
+ 
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
-			<div class="form-group">
-				<label for="nome">Nome</label> 
-				<input type="text" id="nome" name="nome"
-					class="form-control" 
-					placeholder="Digite o nome do podcast"
-					value="${podcast.nome}">
-			</div>
-			<div class="form-group">
-				<label for="descricao">Descrição</label>
-				<textarea class="form-control" id="descricao" name="descricao"
-					rows="4" placeholder="Digite a descrição do podcast">${podcast.descricao}</textarea>
-			</div>
-			<div class="form-group">
-				<label for="site">Site</label> 
-					<input type="text" name="site"
-					class="form-control" id="site"
-					placeholder="Digite o site do podcast"
-					value="${podcast.site}">
-			</div>
+		
+			<t:input path="nome" label="Nome" placeholder="Digite o nome do podcast" required="true" />
+			
+			<t:textarea path="descricao" label="Descrição" placeholder="Digite a descrição do podcast" required="true" rows="4"/>
+			
+			<t:input path="site" label="Site" placeholder="Digite o site do podcast. Exemplo: 'http://jnaldo.com'" required="true" />
+		
 		</div>
 		<div class="panel-footer right">			
 			<a href="${contextPath}/podcasts" class="btn btn-default">Cancelar</a>
@@ -45,4 +38,4 @@
 		</div>
 
 	</div>
-</form>
+</form:form>

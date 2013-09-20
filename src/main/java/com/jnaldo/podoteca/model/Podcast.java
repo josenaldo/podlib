@@ -2,11 +2,24 @@ package com.jnaldo.podoteca.model;
 
 import java.util.List;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
+
 public class Podcast extends EntidadeBase {
 
+	@NotEmpty
+	@Length(min = 3, max = 200)
 	private String nome;
+
+	@NotEmpty
+	@URL
 	private String site;
+
+	@NotEmpty
+	@Length(min = 20, max = 200)
 	private String descricao;
+
 	private List<Episodio> episodios;
 
 	public String getNome() {

@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 
 <h1>Podcasts</h1>
@@ -13,6 +16,7 @@
 		<th>Núm. de episódios</th>
 		<th></th>
 		<th></th>
+		<th></th>
 	</tr>
 	<c:forEach items="${podcasts}" var="podcast">
 		<tr class="left">
@@ -21,22 +25,22 @@
 			<td>${podcast.site}</td>
 			<td>${fn:length(podcast.episodios)}</td>
 			<td>
-				<a href="${contextPath}/podcasts/${podcast.id}"
+				<a href="${contextPath}/podcasts/${podcast.id}" title="Visualizar"
 					class="btn btn-info"> <i class="icon-zoom-in"></i>
 				</a>
 			</td>
 			<td>
-				<a href="${contextPath}/podcasts/${podcast.id}/editar"
+				<a href="${contextPath}/podcasts/${podcast.id}/editar" title="Editar"
 					class="btn btn-warning"> <i class="icon-edit"></i>
 				</a>
 			</td>
 			<td>
-				<form action="${contextPath}/podcasts/${podcast.id}" method="post">
+				<form:form method="DELETE" action="${contextPath}/podcasts/${podcast.id}" >				
 					<input type="hidden" name="_method" value="DELETE" />
-					<button type="submit" class="btn btn-danger">
-						<i class="icon-remove"></i>
+					<button type="submit" class="btn btn-danger" title="Remover">
+						<i class="icon-minus"></i>
 					</button>
-				</form>
+				</form:form>
 			</td>
 		</tr>
 	</c:forEach>

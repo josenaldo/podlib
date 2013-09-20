@@ -1,10 +1,21 @@
 package com.jnaldo.podoteca.model;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Participante extends EntidadeBase {
 
+	@NotEmpty
+	@Length(min = 3, max = 255)
 	private String nome;
+
+	@NotEmpty
+	@Email
 	private String email;
+
 	private String apelido;
+
 	private String twitter;
 
 	public String getNome() {
