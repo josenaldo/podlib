@@ -5,7 +5,7 @@
 
 <h1>${acao} episódio</h1>
 
-<form action="${contextPath}/episodio/salvar" method="post">
+<form action="${contextPath}/episodios" method="post">
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
 			<div class="form-group">

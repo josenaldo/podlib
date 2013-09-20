@@ -33,8 +33,7 @@
 </head>
 <body>
   
-<header>	
-	
+<header class="main-nav">	
 	<!-- Navbar -->
 	<nav class="navbar navbar-default navbar-static-top" role="navigation">
 		<div class="navbar-header">
@@ -76,5 +75,20 @@
 	</nav>
 </header>
 
+<c:if test="${not empty mensagem}">
+<div class="row-container" >
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-lg-offset-3 vspace10 alert-top">
+				<div class="alert alert-${tipoDaMensagem}">					
+					${mensagem}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</c:if>
+
 <div class="row-container">
 	<div class="container column-center">
+		<div class="row vspace30">

@@ -1,9 +1,13 @@
-package com.jnaldo.podoteca.controller;
+package com.jnaldo.podoteca.web;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.jnaldo.podoteca.model.Episodio;
 
 @Controller
 @RequestMapping("episodios")
@@ -11,8 +15,6 @@ public class EpisodioController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String listarepisodios(Model model) {
-
-		model.addAttribute("message", "Lambda, lambda, lambda, Nerds!");
 
 		return "episodio/listar";
 	}
@@ -25,8 +27,13 @@ public class EpisodioController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String salvarEpisodio() {
-		return "redirect:";
+	public String salvarEpisodio(@ModelAttribute("episodio") Episodio episodio,
+			RedirectAttributes attr) {
+
+		attr.addFlashAttribute("mensagem", "Episódio " + episodio.getTitulo()
+				+ " adicionado com sucesso");
+		attr.addFlashAttribute("tipoDaMensagem", "success");
+		return "redirect:/episodios";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
@@ -42,11 +49,11 @@ public class EpisodioController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public String atualizarEpisodio() {
-		return "redirect:";
+		return "redirect:/episodios";
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	public String removerEpisodio() {
-		return "redirect:";
+		return "redirect:/episodios";
 	}
 }

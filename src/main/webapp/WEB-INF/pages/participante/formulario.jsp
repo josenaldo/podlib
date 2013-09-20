@@ -5,7 +5,7 @@
 
 <h1>${acao} participante</h1>
 
-<form action="${contextPath}/participante/salvar" method="post">
+<form action="${contextPath}/participantes" method="post">
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
 			<div class="form-group">

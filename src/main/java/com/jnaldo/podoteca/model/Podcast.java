@@ -1,8 +1,9 @@
-package com.jnaldo.podoteca.domain;
+package com.jnaldo.podoteca.model;
 
 import java.util.List;
 
-public class Podcast {
+public class Podcast extends EntidadeBase {
+
 	private String nome;
 	private String site;
 	private String descricao;

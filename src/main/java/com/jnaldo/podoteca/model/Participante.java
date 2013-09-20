@@ -1,6 +1,7 @@
-package com.jnaldo.podoteca.domain;
+package com.jnaldo.podoteca.model;
 
-public class Participante {
+public class Participante extends EntidadeBase {
+
 	private String nome;
 	private String email;
 	private String apelido;

@@ -1,8 +1,8 @@
-package com.jnaldo.podoteca.domain;
+package com.jnaldo.podoteca.model;
 
 import java.util.List;
 
-public class Episodio {
+public class Episodio extends EntidadeBase {
 
 	private String titulo;
 	private String descricao;
