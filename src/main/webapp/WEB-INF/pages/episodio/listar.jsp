@@ -12,6 +12,7 @@
 		<th>Título</th>
 		<th>Descrição</th>
 		<th>URL</th>
+		<th>Podcast</th>
 		<th></th>
 		<th></th>
 		<th></th>	
@@ -21,6 +22,12 @@
 			<td>${episodio.titulo}</td>
 			<td>${episodio.descricao}</td>
 			<td>${episodio.url}</td>
+			<td>
+				<a href="${contextPath}/podcasts/${episodio.podcast.id}">
+					${episodio.podcast.nome}
+				</a>
+			</td>
+			
 			<td>
 				<a href="${contextPath}/episodios/${episodio.id}" title="Visualizar"
 					class="btn btn-info"> <i class="icon-zoom-in"></i>

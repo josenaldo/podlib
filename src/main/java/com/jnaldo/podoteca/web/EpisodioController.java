@@ -1,152 +1,204 @@
 package com.jnaldo.podoteca.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jnaldo.podoteca.model.Episodio;
+import com.jnaldo.podoteca.model.Podcast;
+import com.jnaldo.podoteca.services.EpisodioService;
+import com.jnaldo.podoteca.services.PodcastService;
+import com.jnaldo.podoteca.util.message.MessageUtils;
+import com.jnaldo.podoteca.util.message.NivelDoAlerta;
+import com.jnaldo.podoteca.web.exception.WebException;
 
 @Controller
 @RequestMapping("episodios")
 public class EpisodioController {
 
+	@Autowired
+	private EpisodioService episodioService;
+
+	@Autowired
+	private PodcastService podcastService;
+
+	@Autowired
+	private MessageUtils messageUtils;
+
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listarepisodios(Model model) {
-		ModelAndView mav = new ModelAndView();
-		List<Episodio> episodios = new ArrayList<Episodio>();
+	public ModelAndView listarEpisodios(ModelAndView modelAndView) {
 
-		Episodio episodio1 = new Episodio();
-		episodio1.setId(1l);
-		episodio1
-				.setTitulo("99Vidas 95 – 2-Pak: Maui Mallard e Esquadrão Marte");
-		episodio1
-				.setDescricao("Para os que reclamam de atraso, um 2-Pak adiantado. Evandro de Freitas encerra o último ciclo da série mais pessoal do 99vidas com dois jogos que curtiram o sucesso com a ajuda da fixação […]");
-		episodio1
-				.setUrl("http://99vidas.com.br/99vidas-95-2-pak-maui-mallard-e-esquadrao-marte/");
+		List<Episodio> episodios = this.episodioService.findAll();
 
-		Episodio episodio2 = new Episodio();
-		episodio2.setId(2l);
-		episodio2.setTitulo("99Vidas 94 – Brinquedos da Infância");
-		episodio2
-				.setDescricao("O episódio dessa semana volta aos anos da tenra infância para falar dos brinquedos que nos entretinham na ausência dos videogames, no melhor Estilo 99vidas! Jurandir Filho (@jurandirfilho), Izzy Nobre (@izzynobre), Evandro de Freitas […]");
-		episodio2
-				.setUrl("http://99vidas.com.br/99vidas-94-brinquedos-da-infancia/");
+		modelAndView.setViewName("episodio/listar");
+		modelAndView.addObject("episodios", episodios);
 
-		Episodio episodio3 = new Episodio();
-		episodio3.setId(3l);
-		episodio3.setTitulo("99Vidas 93 – God of War, A Série");
-		episodio3
-				.setDescricao("God of War foi uma aposta da Sony no PS2, que muitos julgavam inferior e incapaz, e que acabou gerando uma das franquias mais reconhecidas da atualidade. O 99vidas analisou os jogos dessa série, que […]");
-		episodio3
-				.setUrl("http://99vidas.com.br/99vidas-93-god-of-war-a-serie/");
-
-		episodios.add(episodio1);
-		episodios.add(episodio2);
-		episodios.add(episodio3);
-
-		mav.setViewName("episodio/listar");
-		mav.addObject("episodios", episodios);
-
-		return mav;
-
+		return modelAndView;
 	}
 
 	@RequestMapping("adicionar")
-	public String adicionarEpisodio(Model model) {
+	public ModelAndView adicionarEpisodio(
+			@RequestParam(value = "podcastId", required = false) Long podcastId,
+			RedirectAttributes attr, ModelAndView modelAndView) {
 
-		model.addAttribute("episodio", new Episodio());
+		Episodio episodio = new Episodio();
 
-		return "episodio/formulario";
+		List<Podcast> podcasts = this.buscarPodcasts();
+
+		Podcast podcastSelecionado = this.buscarPodcastSelecionado(podcastId);
+
+		episodio.setPodcast(podcastSelecionado);
+
+		modelAndView.addObject("podcasts", podcasts);
+		modelAndView.addObject("episodio", episodio);
+		modelAndView.setViewName("episodio/formulario");
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String salvarEpisodio(
+	public ModelAndView salvarEpisodio(
 			@Valid @ModelAttribute("episodio") Episodio episodio,
-			BindingResult result, RedirectAttributes attr, Model model) {
+			BindingResult result, RedirectAttributes attr,
+			ModelAndView modelAndView) {
 
-		if (result.hasErrors()) {
-			model.addAttribute("mensagem", "Verifique os erros no formulário.");
-			model.addAttribute("tipoDaMensagem", "danger");
-			model.addAttribute("episodio", episodio);
-			return "episodio/formulario";
-		} else {
-			attr.addFlashAttribute("mensagem",
-					"Episódio " + episodio.getTitulo()
-							+ " adicionado com sucesso");
-			attr.addFlashAttribute("tipoDaMensagem", "success");
-			return "redirect:/episodios";
-		}
-	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.POST)
-	public String mostraEpisodio() {
-		return "episodio/visualizar";
+		return this.saveEpisodio(episodio, result, attr, modelAndView);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public String visualizarEpisodio(@PathVariable("id") Long id, Model model) {
+	public ModelAndView visualizarEpisodio(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView) {
 
-		Episodio episodio = new Episodio();
-		episodio.setId(id);
-		episodio.setTitulo("Teste");
-		episodio.setDescricao("Teste de descrição");
-		episodio.setUrl("http://www.episodio.com");
-		model.addAttribute("episodio", episodio);
+		Episodio episodio = this.episodioService.find(id);
 
-		return "episodio/visualizar";
+		if (episodio == null) {
+			throw new WebException("Episodio não encontrado.");
+		} else {
+			modelAndView.addObject("episodio", episodio);
+			modelAndView.setViewName("episodio/visualizar");
+		}
+
+		return modelAndView;
 	}
 
 	@RequestMapping("{id}/editar")
-	public String editarEpisodio(@PathVariable("id") Long id, Model model) {
+	public ModelAndView editarEpisodio(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView) {
 
-		Episodio episodio = new Episodio();
-		episodio.setId(id);
-		episodio.setTitulo("Teste");
-		episodio.setDescricao("Teste de descrição");
-		episodio.setUrl("http://www.episodio.com");
-		model.addAttribute("episodio", episodio);
+		Episodio episodio = this.episodioService.find(id);
 
-		return "episodio/formulario";
+		List<Podcast> podcasts = this.buscarPodcasts();
+
+		if (episodio == null) {
+			throw new WebException("Episodio não encontrado.");
+		} else {
+			modelAndView.addObject("podcasts", podcasts);
+			modelAndView.addObject("episodio", episodio);
+			modelAndView.setViewName("episodio/formulario");
+		}
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public String atualizarEpisodio(@PathVariable("id") Long id,
+	public ModelAndView atualizarEpisodio(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("episodio") Episodio episodio,
-			BindingResult result, RedirectAttributes attr, Model model) {
+			BindingResult result, RedirectAttributes attr,
+			ModelAndView modelAndView) {
 
-		if (result.hasErrors()) {
-			model.addAttribute("mensagem", "Verifique os erros no formulário.");
-			model.addAttribute("tipoDaMensagem", "danger");
+		return this.saveEpisodio(episodio, result, attr, modelAndView);
 
-			model.addAttribute("episodio", episodio);
-			return "episodio/formulario";
-		} else {
-			attr.addFlashAttribute("mensagem",
-					"Episodio " + episodio.getTitulo() + " editado com sucesso");
-			attr.addFlashAttribute("tipoDaMensagem", "success");
-
-			return "redirect:/episodios";
-		}
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public String removerEpisodio(@PathVariable("id") Long id,
-			RedirectAttributes attr) {
-		attr.addFlashAttribute("mensagem", "Episodio apagado com sucesso");
-		attr.addFlashAttribute("tipoDaMensagem", "info");
+	public ModelAndView removerEpisodio(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView) {
 
-		return "redirect:/episodios";
+		Episodio episodio = this.episodioService.find(id);
+
+		if (episodio == null) {
+			throw new WebException("Episodio não encontrado.");
+		} else {
+			this.episodioService.delete(id);
+
+			this.messageUtils.mensagem(attr, "Episodio apagado com sucesso",
+					NivelDoAlerta.SUCCESS);
+
+		}
+		modelAndView.setViewName("redirect:/episodios");
+
+		return modelAndView;
+
+	}
+
+	private ModelAndView saveEpisodio(Episodio episodio, BindingResult result,
+			RedirectAttributes attr, ModelAndView modelAndView) {
+
+		if (result.hasErrors()) {
+
+			this.messageUtils.mensagem(modelAndView,
+					"Verifique os erros no formulário.", NivelDoAlerta.DANGER);
+
+			List<Podcast> podcasts = this.buscarPodcasts();
+
+			modelAndView.addObject("podcasts", podcasts);
+			modelAndView.addObject("episodio", episodio);
+			modelAndView.setViewName("episodio/formulario");
+		} else {
+
+			this.episodioService.save(episodio);
+
+			this.messageUtils.mensagem(attr, "Episodio " + episodio.getTitulo()
+					+ " adicionado com sucesso", NivelDoAlerta.SUCCESS);
+
+			modelAndView.setViewName("redirect:/episodios");
+		}
+
+		return modelAndView;
+	}
+
+	@ExceptionHandler(WebException.class)
+	public String handleIOException(WebException ex, RedirectAttributes attr) {
+
+		this.messageUtils.mensagem(attr, ex.getMessage(), NivelDoAlerta.DANGER);
+
+		return "redirect:error";
+	}
+
+	private Podcast buscarPodcastSelecionado(Long podcastId) {
+		if (podcastId == null) {
+			return null;
+		}
+
+		Podcast podcast = this.podcastService.find(podcastId);
+
+		if (podcast == null) {
+			throw new WebException("Podcast informado não foi encontrado");
+		}
+
+		return podcast;
+	}
+
+	private List<Podcast> buscarPodcasts() {
+		List<Podcast> podcasts = this.podcastService.findAll();
+
+		if (podcasts.isEmpty()) {
+			throw new WebException("Nenhum podcast foi cadastrado");
+		}
+
+		return podcasts;
 	}
 
 }

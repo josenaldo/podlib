@@ -6,15 +6,15 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
- <c:choose>
-        <c:when test="${episodio.novo}">
-        	<c:set var="metodo" value="POST"/>
-        	<c:set var="acao" value="Adicionar"/>
-        </c:when>
-        <c:otherwise>        	
-        	<c:set var="metodo" value="PUT"/>
-        	<c:set var="acao" value="Editar"/>
-        </c:otherwise>
+<c:choose>
+	<c:when test="${episodio.novo}">
+		<c:set var="metodo" value="POST"/>
+        <c:set var="acao" value="Adicionar"/>
+	</c:when>
+	<c:otherwise>        	
+		<c:set var="metodo" value="PUT"/>
+        <c:set var="acao" value="Editar"/>
+	</c:otherwise>
 </c:choose>
 <h1>${acao} episódio</h1>
 
@@ -25,6 +25,8 @@
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
 		
+			<t:selectFromObjecs path="podcast" label="Podcast" required="true" items="${podcasts}" itemValue="id" itemLabel="nome"/>
+			
 			<t:input path="titulo" label="Título" placeholder="Digite o título do episódio" required="true" />
 			
 			<t:textarea path="descricao" label="Descrição" placeholder="Digite a descrição do episódio" required="true" rows="4"/>
