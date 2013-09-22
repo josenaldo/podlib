@@ -24,4 +24,37 @@ public class MessageUtils {
 
 	}
 
+	public void informacao(ModelAndView modelAndView, String mensagem) {
+		this.mensagem(modelAndView, mensagem, NivelDoAlerta.INFO);
+	}
+
+	public void informacao(RedirectAttributes redirectAttributes,
+			String mensagem) {
+		this.mensagem(redirectAttributes, mensagem, NivelDoAlerta.INFO);
+	}
+
+	public void sucesso(ModelAndView modelAndView, String mensagem) {
+		this.mensagem(modelAndView, mensagem, NivelDoAlerta.SUCCESS);
+	}
+
+	public void sucesso(RedirectAttributes redirectAttributes, String mensagem) {
+		this.mensagem(redirectAttributes, mensagem, NivelDoAlerta.SUCCESS);
+	}
+
+	public void alerta(ModelAndView modelAndView, String mensagem) {
+		this.mensagem(modelAndView, mensagem, NivelDoAlerta.WARNING);
+	}
+
+	public void alerta(RedirectAttributes redirectAttributes, String mensagem) {
+		this.mensagem(redirectAttributes, mensagem, NivelDoAlerta.WARNING);
+	}
+
+	public void erro(ModelAndView modelAndView, String mensagem) {
+		this.mensagem(modelAndView, mensagem, NivelDoAlerta.DANGER);
+	}
+
+	public void erro(RedirectAttributes redirectAttributes, String mensagem) {
+		this.mensagem(redirectAttributes, mensagem, NivelDoAlerta.DANGER);
+	}
+
 }

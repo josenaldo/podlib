@@ -1,6 +1,6 @@
 package com.jnaldo.podoteca.web.exception;
 
-public class WebException extends RuntimeException {
+public class WebException extends Exception {
 
 	private static final long serialVersionUID = 5390372089094233082L;
 

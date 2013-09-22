@@ -2,7 +2,7 @@ package com.jnaldo.podoteca.util.message;
 
 public enum NivelDoAlerta {
 
-	SUCCESS("success"), INFO("info"), ALERT("alert"), DANGER("danger");
+	SUCCESS("success"), INFO("info"), WARNING("warning"), DANGER("danger");
 
 	private String name;
 

@@ -14,3 +14,7 @@ body {
  	width: 50%;
  	margin: auto;
  }
+ 
+ .btn-back i{
+ 	font-size: 50px;
+ }

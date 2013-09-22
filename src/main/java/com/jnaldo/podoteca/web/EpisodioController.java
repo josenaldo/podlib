@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,7 +50,8 @@ public class EpisodioController {
 	@RequestMapping("adicionar")
 	public ModelAndView adicionarEpisodio(
 			@RequestParam(value = "podcastId", required = false) Long podcastId,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Episodio episodio = new Episodio();
 
@@ -72,14 +72,15 @@ public class EpisodioController {
 	public ModelAndView salvarEpisodio(
 			@Valid @ModelAttribute("episodio") Episodio episodio,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws WebException {
 
 		return this.saveEpisodio(episodio, result, attr, modelAndView);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView visualizarEpisodio(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Episodio episodio = this.episodioService.find(id);
 
@@ -95,7 +96,8 @@ public class EpisodioController {
 
 	@RequestMapping("{id}/editar")
 	public ModelAndView editarEpisodio(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Episodio episodio = this.episodioService.find(id);
 
@@ -116,7 +118,7 @@ public class EpisodioController {
 	public ModelAndView atualizarEpisodio(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("episodio") Episodio episodio,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws WebException {
 
 		return this.saveEpisodio(episodio, result, attr, modelAndView);
 
@@ -124,7 +126,8 @@ public class EpisodioController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ModelAndView removerEpisodio(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Episodio episodio = this.episodioService.find(id);
 
@@ -144,7 +147,8 @@ public class EpisodioController {
 	}
 
 	private ModelAndView saveEpisodio(Episodio episodio, BindingResult result,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		if (result.hasErrors()) {
 
@@ -169,15 +173,8 @@ public class EpisodioController {
 		return modelAndView;
 	}
 
-	@ExceptionHandler(WebException.class)
-	public String handleIOException(WebException ex, RedirectAttributes attr) {
-
-		this.messageUtils.mensagem(attr, ex.getMessage(), NivelDoAlerta.DANGER);
-
-		return "redirect:error";
-	}
-
-	private Podcast buscarPodcastSelecionado(Long podcastId) {
+	private Podcast buscarPodcastSelecionado(Long podcastId)
+			throws WebException {
 		if (podcastId == null) {
 			return null;
 		}
@@ -191,7 +188,7 @@ public class EpisodioController {
 		return podcast;
 	}
 
-	private List<Podcast> buscarPodcasts() {
+	private List<Podcast> buscarPodcasts() throws WebException {
 		List<Podcast> podcasts = this.podcastService.findAll();
 
 		if (podcasts.isEmpty()) {
