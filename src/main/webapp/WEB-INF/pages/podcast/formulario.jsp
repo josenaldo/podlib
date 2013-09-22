@@ -18,13 +18,18 @@
 </c:choose>
 <h1>${acao} podcast</h1>
 
+<c:if test="${not empty mensagem}">
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
+</c:if>
+
 <form:form method="${metodo}" id="podcast-form" 
 	commandName="podcast"
 	action="${contextPath}/podcasts/${podcast.id}">
  
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
-		
+			<t:input path="id" label="ID" disabled="true"/>
+			
 			<t:input path="nome" label="Nome" placeholder="Digite o nome do podcast" required="true" />
 			
 			<t:textarea path="descricao" label="Descrição" placeholder="Digite a descrição do podcast" required="true" rows="4"/>

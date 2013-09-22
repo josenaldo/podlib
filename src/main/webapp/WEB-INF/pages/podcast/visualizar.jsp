@@ -25,7 +25,9 @@
 			</tr>
 			<tr>
 				<th>Site</th>
-				<td>${podcast.site}</td>
+				<td>
+					<a href="${podcast.site}" target="_blank">${podcast.site}</a>
+				</td>
 			</tr>
 		</table>
 	</div>				
@@ -37,6 +39,10 @@
 				Cancelar
 			</a>
 			
+			<a href="${contextPath}/podcasts/${podcast.id}/editar" title="Editar"
+				class="btn btn-warning"> Editar
+			</a>
+				
 			<a href="${contextPath}/episodios/adicionar?podcastId=${podcast.id}" class="btn btn-primary">
 				Adicionar episódio
 			</a>

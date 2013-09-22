@@ -8,8 +8,14 @@
 
 
 <h1>Podcasts</h1>
+
+<c:if test="${not empty mensagem}">
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
+</c:if>
+
 <table class="table table-stripped table-hover">
 	<tr>
+		<th>ID</th>
 		<th>Nome</th>
 		<th>Descrição</th>
 		<th>Site</th>
@@ -20,9 +26,12 @@
 	</tr>
 	<c:forEach items="${podcasts}" var="podcast">
 		<tr class="left">
+			<td>${podcast.id}</td>
 			<td>${podcast.nome}</td>
 			<td>${podcast.descricao}</td>
-			<td>${podcast.site}</td>
+			<td>
+				<a href="${podcast.site}" target="_blank">${podcast.site}</a>
+			</td>
 			<td>${fn:length(podcast.episodios)}</td>
 			<td>
 				<a href="${contextPath}/podcasts/${podcast.id}" title="Visualizar"

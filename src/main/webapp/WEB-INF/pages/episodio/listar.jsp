@@ -7,6 +7,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
     
 <h1>Episódios</h1>
+
+<c:if test="${not empty mensagem}">
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
+</c:if>
+
 <table class="table table-stripped table-hover">
 	<tr>
 		<th>Título</th>

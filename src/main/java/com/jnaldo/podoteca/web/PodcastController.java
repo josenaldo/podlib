@@ -16,8 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jnaldo.podoteca.model.Podcast;
 import com.jnaldo.podoteca.services.PodcastService;
-import com.jnaldo.podoteca.util.message.MessageUtils;
-import com.jnaldo.podoteca.util.message.NivelDoAlerta;
+import com.jnaldo.podoteca.util.message.Alerta;
+import com.jnaldo.podoteca.web.exception.WebException;
 
 @Controller
 @RequestMapping("podcasts")
@@ -27,7 +27,7 @@ public class PodcastController {
 	private PodcastService podcastService;
 
 	@Autowired
-	private MessageUtils messageUtils;
+	private Alerta alerta;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listarPodcasts(ModelAndView modelAndView) {
@@ -61,14 +61,13 @@ public class PodcastController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView visualizarPodcast(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Podcast podcast = this.podcastService.find(id);
 
 		if (podcast == null) {
-			this.messageUtils.mensagem(attr, "Podcast não encontrado.",
-					NivelDoAlerta.DANGER);
-			modelAndView.setViewName("redirect:/podcasts");
+			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
 		} else {
 			modelAndView.addObject("podcast", podcast);
 			modelAndView.setViewName("podcast/visualizar");
@@ -79,14 +78,13 @@ public class PodcastController {
 
 	@RequestMapping("{id}/editar")
 	public ModelAndView editarPodcast(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Podcast podcast = this.podcastService.find(id);
 
 		if (podcast == null) {
-			this.messageUtils.mensagem(attr, "Podcast não encontrado.",
-					NivelDoAlerta.DANGER);
-			modelAndView.setViewName("redirect:/podcasts");
+			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
 		} else {
 			modelAndView.addObject("podcast", podcast);
 			modelAndView.setViewName("podcast/formulario");
@@ -107,18 +105,17 @@ public class PodcastController {
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ModelAndView removerPodcast(@PathVariable("id") Long id,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
 		Podcast podcast = this.podcastService.find(id);
 
 		if (podcast == null) {
-			this.messageUtils.mensagem(attr, "Podcast não encontrado.",
-					NivelDoAlerta.DANGER);
+			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
 		} else {
 			this.podcastService.delete(id);
 
-			this.messageUtils.mensagem(attr, "Podcast apagado com sucesso",
-					NivelDoAlerta.SUCCESS);
+			this.alerta.sucesso(attr, Alerta.PODCAST_APAGADO);
 
 		}
 		modelAndView.setViewName("redirect:/podcasts");
@@ -132,8 +129,7 @@ public class PodcastController {
 
 		if (result.hasErrors()) {
 
-			this.messageUtils.mensagem(modelAndView,
-					"Verifique os erros no formulário.", NivelDoAlerta.DANGER);
+			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
 
 			modelAndView.addObject("podcast", podcast);
 			modelAndView.setViewName("podcast/formulario");
@@ -141,8 +137,7 @@ public class PodcastController {
 
 			this.podcastService.save(podcast);
 
-			this.messageUtils.mensagem(attr, "Podcast " + podcast.getNome()
-					+ " adicionado com sucesso", NivelDoAlerta.SUCCESS);
+			this.alerta.sucesso(attr, Alerta.PODCAST_SALVO);
 
 			modelAndView.setViewName("redirect:/podcasts");
 		}

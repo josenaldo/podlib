@@ -5,14 +5,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.jnaldo.podoteca.util.message.MessageUtils;
+import com.jnaldo.podoteca.util.message.Alerta;
 import com.jnaldo.podoteca.web.exception.WebException;
 
 @ControllerAdvice
-public class ErrorController {
+public class TratadorDeErrosGlobal {
 
 	@Autowired
-	private MessageUtils messageUtils;
+	private Alerta alerta;
 
 	@ExceptionHandler(WebException.class)
 	public ModelAndView handleWebException(WebException ex) {
@@ -20,8 +20,7 @@ public class ErrorController {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("error");
 
-		System.out.println("CHAMANDO ERRO");
-		this.messageUtils.erro(modelAndView, ex.getMessage());
+		this.alerta.erro(modelAndView, ex.getMessage());
 
 		return modelAndView;
 	}

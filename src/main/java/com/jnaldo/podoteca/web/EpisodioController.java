@@ -19,8 +19,7 @@ import com.jnaldo.podoteca.model.Episodio;
 import com.jnaldo.podoteca.model.Podcast;
 import com.jnaldo.podoteca.services.EpisodioService;
 import com.jnaldo.podoteca.services.PodcastService;
-import com.jnaldo.podoteca.util.message.MessageUtils;
-import com.jnaldo.podoteca.util.message.NivelDoAlerta;
+import com.jnaldo.podoteca.util.message.Alerta;
 import com.jnaldo.podoteca.web.exception.WebException;
 
 @Controller
@@ -34,7 +33,7 @@ public class EpisodioController {
 	private PodcastService podcastService;
 
 	@Autowired
-	private MessageUtils messageUtils;
+	private Alerta alerta;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView listarEpisodios(ModelAndView modelAndView) {
@@ -74,7 +73,7 @@ public class EpisodioController {
 			BindingResult result, RedirectAttributes attr,
 			ModelAndView modelAndView) throws WebException {
 
-		return this.saveEpisodio(episodio, result, attr, modelAndView);
+		return this.salvar(episodio, result, attr, modelAndView);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
@@ -85,7 +84,7 @@ public class EpisodioController {
 		Episodio episodio = this.episodioService.find(id);
 
 		if (episodio == null) {
-			throw new WebException("Episodio não encontrado.");
+			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
 		} else {
 			modelAndView.addObject("episodio", episodio);
 			modelAndView.setViewName("episodio/visualizar");
@@ -104,7 +103,7 @@ public class EpisodioController {
 		List<Podcast> podcasts = this.buscarPodcasts();
 
 		if (episodio == null) {
-			throw new WebException("Episodio não encontrado.");
+			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
 		} else {
 			modelAndView.addObject("podcasts", podcasts);
 			modelAndView.addObject("episodio", episodio);
@@ -120,7 +119,7 @@ public class EpisodioController {
 			BindingResult result, RedirectAttributes attr,
 			ModelAndView modelAndView) throws WebException {
 
-		return this.saveEpisodio(episodio, result, attr, modelAndView);
+		return this.salvar(episodio, result, attr, modelAndView);
 
 	}
 
@@ -132,12 +131,11 @@ public class EpisodioController {
 		Episodio episodio = this.episodioService.find(id);
 
 		if (episodio == null) {
-			throw new WebException("Episodio não encontrado.");
+			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
 		} else {
 			this.episodioService.delete(id);
 
-			this.messageUtils.mensagem(attr, "Episodio apagado com sucesso",
-					NivelDoAlerta.SUCCESS);
+			this.alerta.sucesso(attr, Alerta.EPISODIO_APAGADO);
 
 		}
 		modelAndView.setViewName("redirect:/episodios");
@@ -146,14 +144,13 @@ public class EpisodioController {
 
 	}
 
-	private ModelAndView saveEpisodio(Episodio episodio, BindingResult result,
-			RedirectAttributes attr, ModelAndView modelAndView)
+	private ModelAndView salvar(Episodio episodio, BindingResult result,
+			RedirectAttributes redirectAttributes, ModelAndView modelAndView)
 			throws WebException {
 
 		if (result.hasErrors()) {
 
-			this.messageUtils.mensagem(modelAndView,
-					"Verifique os erros no formulário.", NivelDoAlerta.DANGER);
+			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
 
 			List<Podcast> podcasts = this.buscarPodcasts();
 
@@ -164,8 +161,7 @@ public class EpisodioController {
 
 			this.episodioService.save(episodio);
 
-			this.messageUtils.mensagem(attr, "Episodio " + episodio.getTitulo()
-					+ " adicionado com sucesso", NivelDoAlerta.SUCCESS);
+			this.alerta.sucesso(redirectAttributes, Alerta.EPISODIO_SALVO);
 
 			modelAndView.setViewName("redirect:/episodios");
 		}
@@ -182,7 +178,7 @@ public class EpisodioController {
 		Podcast podcast = this.podcastService.find(podcastId);
 
 		if (podcast == null) {
-			throw new WebException("Podcast informado não foi encontrado");
+			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
 		}
 
 		return podcast;
@@ -192,7 +188,7 @@ public class EpisodioController {
 		List<Podcast> podcasts = this.podcastService.findAll();
 
 		if (podcasts.isEmpty()) {
-			throw new WebException("Nenhum podcast foi cadastrado");
+			throw new WebException(Alerta.PODCAST_LISTA_VAZIA);
 		}
 
 		return podcasts;

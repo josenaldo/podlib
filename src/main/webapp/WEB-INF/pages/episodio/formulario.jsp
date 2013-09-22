@@ -16,7 +16,12 @@
         <c:set var="acao" value="Editar"/>
 	</c:otherwise>
 </c:choose>
+
 <h1>${acao} episódio</h1>
+
+<c:if test="${not empty mensagem}">
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Canelada!"></t:alert>
+</c:if>
 
 <form:form method="${metodo}" id="episodio-form" 
 	commandName="episodio"

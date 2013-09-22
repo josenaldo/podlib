@@ -10,11 +10,16 @@
 <%@attribute name="label" required="false" type="java.lang.String"%>
 <%@attribute name="required" required="false" type="java.lang.Boolean"%>
 <%@attribute name="placeholder" required="false" type="java.lang.String"%>
+<%@attribute name="disabled" required="false" type="java.lang.Boolean"%>
 
  
 <c:if test="${empty label}">
 	<c:set var="label"
 		value="${fn:toUpperCase(fn:substring(path, 0, 1))}${fn:toLowerCase(fn:substring(path, 1,fn:length(path)))}" />
+</c:if>
+
+<c:if test="${empty disabled}">
+	<c:set var="disabled" value="false" />
 </c:if>
 
 <spring:bind path="${path}">
@@ -30,7 +35,8 @@
 				
 		<form:input path="${path}"
 				cssClass="form-control ${cssClass}"
-				placeholder="${placeholder}" />
+				placeholder="${placeholder}" 
+				disabled="${disabled}"/>
 		
 		<c:if test="${status.error}">
 			<span class="label label-danger"> <i class="icon-exclamation"></i></span> <span class="help-inline text-danger">${status.errorMessage}</span>
