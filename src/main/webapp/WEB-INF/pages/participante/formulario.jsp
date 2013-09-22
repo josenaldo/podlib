@@ -32,7 +32,7 @@
 			<t:input path="email" label="Email" placeholder="Digite o email do participante. Exemplo: 'josenaldo@jnaldo.com'" required="true" />
 			
 			<t:input path="twitter" label="Twitter" placeholder="Digite o Twitter do participante." required="true" />
-		
+			
 		</div>
 		<div class="panel-footer right">			
 			<a href="${contextPath}/participantes" class="btn btn-default">Cancelar</a>

@@ -20,7 +20,7 @@
 <h1>${acao} episódio</h1>
 
 <c:if test="${not empty mensagem}">
-	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Erro de validação"></t:alert>
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
 </c:if>
 
 <form:form method="${metodo}" id="episodio-form" 

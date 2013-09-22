@@ -33,17 +33,17 @@
 				<a href="${podcast.site}" target="_blank">${podcast.site}</a>
 			</td>
 			<td>${fn:length(podcast.episodios)}</td>
-			<td>
+			<td class="buttom-column">
 				<a href="${contextPath}/podcasts/${podcast.id}" title="Visualizar"
 					class="btn btn-info"> <i class="icon-zoom-in"></i>
 				</a>
 			</td>
-			<td>
+			<td class="buttom-column">
 				<a href="${contextPath}/podcasts/${podcast.id}/editar" title="Editar"
 					class="btn btn-warning"> <i class="icon-edit"></i>
 				</a>
 			</td>
-			<td>
+			<td class="buttom-column">
 				<form:form method="DELETE" action="${contextPath}/podcasts/${podcast.id}" >				
 					<input type="hidden" name="_method" value="DELETE" />
 					<button type="submit" class="btn btn-danger" title="Remover">

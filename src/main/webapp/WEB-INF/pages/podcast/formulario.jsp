@@ -19,7 +19,7 @@
 <h1>${acao} podcast</h1>
 
 <c:if test="${not empty mensagem}">
-	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Erro de validação"></t:alert>
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
 </c:if>
 
 <form:form method="${metodo}" id="podcast-form" 
@@ -27,6 +27,7 @@
 	action="${contextPath}/podcasts/${podcast.id}">
  
 	<div class="panel panel-default left form-panel">
+		
 		<div class="panel-body">
 			<t:input path="id" label="ID" disabled="true"/>
 			
@@ -37,6 +38,7 @@
 			<t:input path="site" label="Site" placeholder="Digite o site do podcast. Exemplo: 'http://jnaldo.com'" required="true" />
 		
 		</div>
+		
 		<div class="panel-footer right">			
 			<a href="${contextPath}/podcasts" class="btn btn-default">Cancelar</a>
 			<input type="submit" class="btn btn-primary" value="Salvar">
