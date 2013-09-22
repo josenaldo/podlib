@@ -22,7 +22,19 @@
 			</tr>
 			<tr>
 				<th>Site</th>
-				<td>${episodio.url}</td>
+				<td>
+					<a href="${episodio.url}" target="_blank">
+						${episodio.url}
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<th>Podcast</th>
+				<td>
+					<a href="${contextPath}/podcasts/${episodio.podcast.id}">
+						${episodio.podcast.nome}
+					</a>
+				</td>
 			</tr>
 		</table>
 	</div>				

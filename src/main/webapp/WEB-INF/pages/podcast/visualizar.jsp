@@ -59,18 +59,31 @@
 <h2>Episódios</h2>
 <table class="table table-stripped table-hover">
 	<tr>
+		<th>ID</th>
 		<th>Título</th>
 		<th>Descrição</th>
 		<th>URL</th>
+		<th>Podcast</th>
 		<th></th>
 		<th></th>
 		<th></th>	
 	</tr>
 	<c:forEach items="${podcast.episodios}" var="episodio">
 		<tr class="left">
+			<td>${episodio.id}</td>
 			<td>${episodio.titulo}</td>
 			<td>${episodio.descricao}</td>
-			<td>${episodio.url}</td>
+			<td>
+				<a href="${episodio.url}" target="_blank">
+					${episodio.url}
+				</a>
+			</td>
+			<td>
+				<a href="${contextPath}/podcasts/${episodio.podcast.id}">
+					${episodio.podcast.nome}
+				</a>
+			</td>
+			
 			<td>
 				<a href="${contextPath}/episodios/${episodio.id}" title="Visualizar"
 					class="btn btn-info"> <i class="icon-zoom-in"></i>

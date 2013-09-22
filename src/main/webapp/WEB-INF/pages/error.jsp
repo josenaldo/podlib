@@ -10,8 +10,8 @@
 <div class="row-container" >
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-6 col-lg-offset-3 vspace10 alert-top">			
-				<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Canelada!"></t:alert>
+			<div class="col-lg-12 vspace10 alert-top">			
+				<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Ocorreu um erro ao executar essa operação"></t:alert>
 			</div>
 		</div>
 	</div>

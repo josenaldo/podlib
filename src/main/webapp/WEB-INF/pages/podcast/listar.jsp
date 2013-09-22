@@ -27,9 +27,9 @@
 	<c:forEach items="${podcasts}" var="podcast">
 		<tr class="left">
 			<td>${podcast.id}</td>
-			<td>${podcast.nome}</td>
-			<td>${podcast.descricao}</td>
-			<td>
+			<td class="break-column">${podcast.nome}</td>
+			<td class="break-column">${podcast.descricao}</td>
+			<td class="break-column">
 				<a href="${podcast.site}" target="_blank">${podcast.site}</a>
 			</td>
 			<td>${fn:length(podcast.episodios)}</td>

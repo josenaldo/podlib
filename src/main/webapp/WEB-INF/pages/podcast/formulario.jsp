@@ -19,7 +19,7 @@
 <h1>${acao} podcast</h1>
 
 <c:if test="${not empty mensagem}">
-	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Erro de validação"></t:alert>
 </c:if>
 
 <form:form method="${metodo}" id="podcast-form" 

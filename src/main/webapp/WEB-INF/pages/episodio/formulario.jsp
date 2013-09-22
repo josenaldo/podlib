@@ -20,7 +20,7 @@
 <h1>${acao} episódio</h1>
 
 <c:if test="${not empty mensagem}">
-	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Canelada!"></t:alert>
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}" messageHeader="Erro de validação"></t:alert>
 </c:if>
 
 <form:form method="${metodo}" id="episodio-form" 
@@ -30,6 +30,8 @@
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
 		
+			<t:input path="id" label="ID" disabled="true"/>
+			
 			<t:selectFromObjecs path="podcast" label="Podcast" required="true" items="${podcasts}" itemValue="id" itemLabel="nome"/>
 			
 			<t:input path="titulo" label="Título" placeholder="Digite o título do episódio" required="true" />

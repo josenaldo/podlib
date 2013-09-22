@@ -14,6 +14,7 @@
 
 <table class="table table-stripped table-hover">
 	<tr>
+		<th>ID</th>
 		<th>Título</th>
 		<th>Descrição</th>
 		<th>URL</th>
@@ -24,26 +25,33 @@
 	</tr>
 	<c:forEach items="${episodios}" var="episodio">
 		<tr class="left">
-			<td>${episodio.titulo}</td>
-			<td>${episodio.descricao}</td>
-			<td>${episodio.url}</td>
-			<td>
+			<td>${episodio.id}</td>
+			<td class="break-column">${episodio.titulo}</td>
+			<td class="break-column">
+				${episodio.descricao}
+			</td>
+			<td class="break-column">
+				<a href="${episodio.url}" target="_blank">
+					${episodio.url}
+				</a>
+			</td>
+			<td class="break-column">
 				<a href="${contextPath}/podcasts/${episodio.podcast.id}">
 					${episodio.podcast.nome}
 				</a>
 			</td>
 			
-			<td>
+			<td class="buttom-column">
 				<a href="${contextPath}/episodios/${episodio.id}" title="Visualizar"
 					class="btn btn-info"> <i class="icon-zoom-in"></i>
 				</a>
 			</td>
-			<td>
+			<td class="buttom-column">
 				<a href="${contextPath}/episodios/${episodio.id}/editar" title="Editar"
 					class="btn btn-warning"> <i class="icon-edit"></i>
 				</a>
 			</td>
-			<td>
+			<td class="buttom-column">
 				<form:form method="DELETE" action="${contextPath}/episodios/${episodio.id}" >				
 					<input type="hidden" name="_method" value="DELETE" />
 					<button type="submit" class="btn btn-danger" title="Remover">

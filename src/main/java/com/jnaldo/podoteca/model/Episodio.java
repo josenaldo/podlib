@@ -19,17 +19,18 @@ import org.hibernate.validator.constraints.URL;
 public class Episodio extends EntidadeBase {
 
 	@NotEmpty
-	@Length(min = 3)
+	@Length(min = 3, max = 255)
 	@Column(name = "titulo")
 	private String titulo;
 
 	@NotEmpty
-	@Length(min = 20)
+	@Length(min = 20, max = 2000)
 	@Column(name = "descricao")
 	private String descricao;
 
 	@NotEmpty
 	@URL
+	@Length(max = 255)
 	@Column(name = "url")
 	private String url;
 

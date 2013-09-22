@@ -22,12 +22,15 @@ public class Participante extends EntidadeBase {
 
 	@NotEmpty
 	@Email
+	@Length(max = 255)
 	@Column(name = "email")
 	private String email;
 
+	@Length(max = 255)
 	@Column(name = "apelido")
 	private String apelido;
 
+	@Length(max = 255)
 	@Column(name = "twitter")
 	private String twitter;
 

@@ -16,19 +16,20 @@ import org.hibernate.validator.constraints.URL;
 public class Podcast extends EntidadeBase {
 
 	@NotEmpty
-	@Length(min = 3, max = 200)
+	@Length(min = 3, max = 255)
 	@Column(name = "nome")
 	private String nome;
 
 	@NotEmpty
-	@URL
-	@Column(name = "site")
-	private String site;
-
-	@NotEmpty
-	@Length(min = 20, max = 200)
+	@Length(min = 20, max = 2000)
 	@Column(name = "descricao")
 	private String descricao;
+
+	@NotEmpty
+	@URL
+	@Length(max = 255)
+	@Column(name = "site")
+	private String site;
 
 	@OneToMany(mappedBy = "podcast")
 	private List<Episodio> episodios;
