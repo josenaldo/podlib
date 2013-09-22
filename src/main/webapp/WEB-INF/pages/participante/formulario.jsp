@@ -16,7 +16,12 @@
         	<c:set var="acao" value="Editar"/>
         </c:otherwise>
 </c:choose>
+
 <h1>${acao} participante</h1>
+
+<c:if test="${not empty mensagem}">
+	<t:alert messageText="${mensagem}" messageStyle="${tipoDaMensagem}"></t:alert>
+</c:if>
 
 <form:form method="${metodo}" id="participante-form" 
 	commandName="participante"
@@ -25,13 +30,15 @@
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
 		
+			<t:input path="id" label="ID" disabled="true"/>
+		
 			<t:input path="nome" label="Nome" placeholder="Digite o nome do participante" required="true" />
 			
 			<t:input path="apelido" label="Apelido" placeholder="Digite o apelido do participante" required="false" />
 									
-			<t:input path="email" label="Email" placeholder="Digite o email do participante. Exemplo: 'josenaldo@jnaldo.com'" required="true" />
+			<t:input path="email" label="Email" placeholder="Digite o email do participante. Exemplo: 'josenaldo@jnaldo.com'" required="false" />
 			
-			<t:input path="twitter" label="Twitter" placeholder="Digite o Twitter do participante." required="true" />
+			<t:input path="twitter" label="Twitter" placeholder="Digite o Twitter do participante." required="false" />
 			
 		</div>
 		<div class="panel-footer right">			

@@ -16,8 +16,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jnaldo.podoteca.model.Episodio;
+import com.jnaldo.podoteca.model.Participante;
 import com.jnaldo.podoteca.model.Podcast;
 import com.jnaldo.podoteca.services.EpisodioService;
+import com.jnaldo.podoteca.services.ParticipanteService;
 import com.jnaldo.podoteca.services.PodcastService;
 import com.jnaldo.podoteca.util.message.Alerta;
 import com.jnaldo.podoteca.web.exception.WebException;
@@ -31,6 +33,9 @@ public class EpisodioController {
 
 	@Autowired
 	private PodcastService podcastService;
+
+	@Autowired
+	private ParticipanteService participanteService;
 
 	@Autowired
 	private Alerta alerta;
@@ -169,6 +174,64 @@ public class EpisodioController {
 		return modelAndView;
 	}
 
+	@RequestMapping(value = "adicionar-remover-participantes/{id}", method = RequestMethod.GET)
+	public ModelAndView adicionarParticipantes(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
+
+		EpisodioParticipantesForm episodioParticipanteForm = new EpisodioParticipantesForm();
+		List<Participante> participantes = this.buscarParticipantes();
+		List<Episodio> episodios = this.buscarEpisodios();
+
+		Episodio episodio = this.buscarEpisodioSelecionado(id);
+		episodioParticipanteForm.setEpisodio(episodio);
+
+		modelAndView.addObject("participantes", participantes);
+		modelAndView.addObject("episodios", episodios);
+		modelAndView.addObject("episodioParticipantesForm",
+				episodioParticipanteForm);
+		modelAndView.setViewName("episodio/formulario_participantes");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "adicionar-remover-participantes", method = RequestMethod.POST)
+	public ModelAndView salvarParticipantes() throws WebException {
+
+		throw new WebException("Método não implementado");
+
+	}
+
+	private List<Podcast> buscarPodcasts() throws WebException {
+		List<Podcast> podcasts = this.podcastService.findAll();
+
+		if (podcasts.isEmpty()) {
+			throw new WebException(Alerta.PODCAST_LISTA_VAZIA);
+		}
+
+		return podcasts;
+	}
+
+	private List<Episodio> buscarEpisodios() throws WebException {
+		List<Episodio> episodios = this.episodioService.findAll();
+
+		if (episodios.isEmpty()) {
+			throw new WebException(Alerta.EPISODIO_LISTA_VAZIA);
+		}
+
+		return episodios;
+	}
+
+	private List<Participante> buscarParticipantes() throws WebException {
+		List<Participante> participantes = this.participanteService.findAll();
+
+		if (participantes.isEmpty()) {
+			throw new WebException(Alerta.PARTICIPANTE_LISTA_VAZIA);
+		}
+
+		return participantes;
+	}
+
 	private Podcast buscarPodcastSelecionado(Long podcastId)
 			throws WebException {
 		if (podcastId == null) {
@@ -184,14 +247,20 @@ public class EpisodioController {
 		return podcast;
 	}
 
-	private List<Podcast> buscarPodcasts() throws WebException {
-		List<Podcast> podcasts = this.podcastService.findAll();
-
-		if (podcasts.isEmpty()) {
-			throw new WebException(Alerta.PODCAST_LISTA_VAZIA);
+	private Episodio buscarEpisodioSelecionado(Long episodioId)
+			throws WebException {
+		if (episodioId == null) {
+			return null;
 		}
 
-		return podcasts;
+		Episodio episodio = this.episodioService.find(episodioId);
+
+		if (episodio == null) {
+			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
+		}
+
+		return episodio;
+
 	}
 
 }

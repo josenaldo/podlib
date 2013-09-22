@@ -2,6 +2,9 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="t" tagdir="/WEB-INF/tags"%> 
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <h1>Visualizar detalhes</h1>
 
@@ -32,11 +35,24 @@
 	</div>				
 	
 	<div class="panel-footer right">
-		<form action="${contextPath}/participantes/${participante.id}" method="post">
-			<input type="hidden" name="_method" value="DELETE" />
-			<a href="${contextPath}/participantes" class="btn btn-default">Cancelar</a>
-			<button type="submit" class="btn btn-danger">Remover</button>
-		</form>
+		<form:form method="DELETE" action="${contextPath}/participantes/${participante.id}">
+			
+			<a href="${contextPath}/participantes" class="btn btn-default">
+				Cancelar
+			</a>
+			
+			<a href="${contextPath}/participantes/${participante.id}/editar"
+				class="btn btn-warning"> Editar
+			</a>
+				
+			<a href="${contextPath}/participantes/adicionar-?participanteId=${participante.id}" class="btn btn-primary">
+				Adicionar episódio
+			</a>
+						
+			<button type="submit" class="btn btn-danger">
+				Remover participante
+			</button>
+		</form:form>
 	</div>
 </div>
 

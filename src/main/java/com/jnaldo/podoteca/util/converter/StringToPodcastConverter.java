@@ -13,12 +13,8 @@ public class StringToPodcastConverter implements Converter<String, Podcast> {
 	@Autowired
 	private PodcastService podcastService;
 
-	public StringToPodcastConverter() {
-		System.out.println("Iniciando conversor");
-	}
-
 	public Podcast convert(String source) {
-		System.out.println("Convertendo");
+
 		Podcast podcast = null;
 
 		try {

@@ -20,7 +20,6 @@ public class Participante extends EntidadeBase {
 	@Column(name = "nome")
 	private String nome;
 
-	@NotEmpty
 	@Email
 	@Length(max = 255)
 	@Column(name = "email")

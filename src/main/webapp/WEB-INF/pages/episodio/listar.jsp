@@ -52,8 +52,7 @@
 				</a>
 			</td>
 			<td class="buttom-column">
-				<form:form method="DELETE" action="${contextPath}/episodios/${episodio.id}" >				
-					<input type="hidden" name="_method" value="DELETE" />
+				<form:form method="DELETE" action="${contextPath}/episodios/${episodio.id}" >
 					<button type="submit" class="btn btn-danger" title="Remover">
 						<i class="icon-minus"></i>
 					</button>

@@ -1,12 +1,11 @@
 package com.jnaldo.podoteca.web;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,133 +15,134 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jnaldo.podoteca.model.Participante;
+import com.jnaldo.podoteca.services.ParticipanteService;
+import com.jnaldo.podoteca.util.message.Alerta;
+import com.jnaldo.podoteca.web.exception.WebException;
 
 @Controller
 @RequestMapping("participantes")
 public class ParticipanteController {
 
+	@Autowired
+	private ParticipanteService participanteService;
+
+	@Autowired
+	private Alerta alerta;
+
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listarparticipantes(Model model) {
+	public ModelAndView listarParticipantes(ModelAndView modelAndView) {
 
-		ModelAndView mav = new ModelAndView();
-		List<Participante> participantes = new ArrayList<Participante>();
+		List<Participante> participantes = this.participanteService.findAll();
 
-		Participante participante1 = new Participante();
-		participante1.setId(1l);
-		participante1.setNome("Affonso Solano");
-		participante1.setApelido("Solano");
-		participante1.setEmail("solano@mrg.com.br");
-		participante1.setTwitter("affonso_solano");
+		modelAndView.setViewName("participante/listar");
+		modelAndView.addObject("participantes", participantes);
 
-		Participante participante2 = new Participante();
-		participante2.setId(2l);
-		participante2.setNome("Roberto Duque Estrada");
-		participante2.setApelido("Beto");
-		participante2.setEmail("beto@mrg.com.br");
-		participante2.setTwitter("betomrg");
-
-		Participante participante3 = new Participante();
-		participante3.setId(3l);
-		participante3.setNome("Diogo Braga");
-		participante3.setApelido("Didi Braguinha");
-		participante3.setEmail("diogo@mrg.com.br");
-		participante3.setTwitter("diogomrg");
-
-		participantes.add(participante1);
-		participantes.add(participante2);
-		participantes.add(participante3);
-
-		mav.setViewName("participante/listar");
-		mav.addObject("participantes", participantes);
-
-		return mav;
+		return modelAndView;
 	}
 
 	@RequestMapping("adicionar")
-	public String adicionarParticipante(Model model) {
+	public ModelAndView adicionarParticipante(ModelAndView modelAndView) {
 
-		model.addAttribute("participante", new Participante());
+		modelAndView.addObject("participante", new Participante());
 
-		return "participante/formulario";
+		modelAndView.setViewName("participante/formulario");
+
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String salvarParticipante(
+	public ModelAndView salvarParticipante(
 			@Valid @ModelAttribute("participante") Participante participante,
-			BindingResult result, RedirectAttributes attr, Model model) {
+			BindingResult result, RedirectAttributes attr,
+			ModelAndView modelAndView) {
 
-		if (result.hasErrors()) {
-			model.addAttribute("mensagem", "Verifique os erros no formulário.");
-			model.addAttribute("tipoDaMensagem", "danger");
-			model.addAttribute("participante", participante);
-			return "participante/formulario";
-		} else {
-			attr.addFlashAttribute("mensagem",
-					"Participante " + participante.getNome()
-							+ " adicionado com sucesso");
-			attr.addFlashAttribute("tipoDaMensagem", "success");
-			return "redirect:/participantes";
-		}
+		return this.saveParticipante(participante, result, attr, modelAndView);
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
-	public String visualizarParticipante(@PathVariable("id") Long id,
-			Model model) {
+	public ModelAndView visualizarParticipante(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
-		Participante participante = new Participante();
-		participante.setId(id);
-		participante.setNome("Deive Pazos");
-		participante.setApelido("Azaghal");
-		participante.setEmail("deive@jovemnerd.com.br");
-		participante.setTwitter("azaghal");
+		Participante participante = this.participanteService.find(id);
 
-		model.addAttribute("participante", participante);
+		if (participante == null) {
+			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
+		} else {
+			modelAndView.addObject("participante", participante);
+			modelAndView.setViewName("participante/visualizar");
+		}
 
-		return "participante/visualizar";
+		return modelAndView;
 	}
 
 	@RequestMapping("{id}/editar")
-	public String editarParticipante(@PathVariable("id") Long id, Model model) {
+	public ModelAndView editarParticipante(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
-		Participante participante = new Participante();
-		participante.setId(id);
-		participante.setNome("Deive Pazos");
-		participante.setApelido("Azaghal");
-		participante.setEmail("deive@jovemnerd.com.br");
-		participante.setTwitter("azaghal");
+		Participante participante = this.participanteService.find(id);
 
-		model.addAttribute("participante", participante);
+		if (participante == null) {
+			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
+		} else {
+			modelAndView.addObject("participante", participante);
+			modelAndView.setViewName("participante/formulario");
+		}
 
-		return "participante/formulario";
+		return modelAndView;
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.PUT)
-	public String atualizarParticipante(@PathVariable("id") Long id,
+	public ModelAndView atualizarParticipante(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("participante") Participante participante,
-			BindingResult result, RedirectAttributes attr, Model model) {
+			BindingResult result, RedirectAttributes attr,
+			ModelAndView modelAndView) {
 
-		if (result.hasErrors()) {
-			model.addAttribute("mensagem", "Verifique os erros no formulário.");
-			model.addAttribute("tipoDaMensagem", "danger");
+		return this.saveParticipante(participante, result, attr, modelAndView);
 
-			model.addAttribute("participante", participante);
-			return "participante/formulario";
-		} else {
-			attr.addFlashAttribute("mensagem",
-					"Participante " + participante.getNome()
-							+ " editado com sucesso");
-			attr.addFlashAttribute("tipoDaMensagem", "success");
-
-			return "redirect:/participantes";
-		}
 	}
 
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
-	public String removerParticipante(@PathVariable("id") Long id,
-			RedirectAttributes attr) {
-		attr.addFlashAttribute("mensagem", "Participante apagado com sucesso");
-		attr.addFlashAttribute("tipoDaMensagem", "info");
+	public ModelAndView removerParticipante(@PathVariable("id") Long id,
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws WebException {
 
-		return "redirect:/participantes";
+		Participante participante = this.participanteService.find(id);
+
+		if (participante == null) {
+			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
+		} else {
+			this.participanteService.delete(id);
+
+			this.alerta.sucesso(attr, Alerta.PARTICIPANTE_APAGADO);
+
+		}
+		modelAndView.setViewName("redirect:/participantes");
+
+		return modelAndView;
+
+	}
+
+	private ModelAndView saveParticipante(Participante participante,
+			BindingResult result, RedirectAttributes attr,
+			ModelAndView modelAndView) {
+
+		if (result.hasErrors()) {
+
+			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+
+			modelAndView.addObject("participante", participante);
+			modelAndView.setViewName("participante/formulario");
+		} else {
+
+			this.participanteService.save(participante);
+
+			this.alerta.sucesso(attr, Alerta.PARTICIPANTE_SALVO);
+
+			modelAndView.setViewName("redirect:/participantes");
+		}
+
+		return modelAndView;
 	}
 }
