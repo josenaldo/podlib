@@ -1,10 +1,7 @@
 package com.jnaldo.podoteca.model;
 
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Email;
@@ -32,9 +29,6 @@ public class Participante extends EntidadeBase {
 	@Length(max = 255)
 	@Column(name = "twitter")
 	private String twitter;
-
-	@ManyToMany(mappedBy = "participantes")
-	private List<Episodio> episodios;
 
 	public String getNome() {
 		return this.nome;
@@ -68,12 +62,13 @@ public class Participante extends EntidadeBase {
 		this.twitter = twitter;
 	}
 
-	public List<Episodio> getEpisodios() {
-		return this.episodios;
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
 	}
 
-	public void setEpisodios(List<Episodio> episodios) {
-		this.episodios = episodios;
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
-
 }

@@ -80,7 +80,7 @@
 	<tr class="left">
 		<td>${participante.id}</td>
 		<td class="break-column">${participante.nome}</td>
-		<td class="break-column">${participante.apelido}</td>
+		<td class="break-column">${participante.apelido}</td>		
 		<td class="break-column">
 			<a href="mailto:${participante.email}" target="_blank">
 				${participante.email}
@@ -88,7 +88,7 @@
 		</td>
 		<td class="break-column">
 			<a href="http://twitter.com/${participante.twitter}" target="_blank">${participante.twitter}</a>
-		</td>
+		</td>		
 		<td class="buttom-column">
 			<a href="${contextPath}/participantes/${participante.id}" title="Visualizar"
 				class="btn btn-info"> <i class="icon-zoom-in"></i>

@@ -24,28 +24,42 @@
 </c:if>
 
 <form:form method="POST" id="episodio-participante-form" 
-	commandName="episodioParticipante"
-	action="${contextPath}/episodios/adicionar-participantes">
+	commandName="episodioParticipantesForm"
+	action="${contextPath}/episodios/adicionar-remover-participantes/${episodioParticipantesForm.id} ">
  
 	<div class="panel panel-default left form-panel">
 		<div class="panel-body">
-					
-			<t:selectFromObjecs path="episodio" label="Episódio" required="true" items="${episodios}" itemValue="id" itemLabel="nome" disabled="true"/>
 			
-			<table class="table table-stripped table-hover">
-				<tr>
-					<th>ID</th>
-					<th>Nome</th>					
-					<th></th>
-				</tr>
-				<c:forEach items="${participantes}" var="participante">
-				<tr class="left">
-					<td>${participante.id}</td>
-					<td class="break-column">${participante.nome}</td>
-					<td></td>
-				</tr>
-				</c:forEach>
-			</table>
+		
+			<form:hidden path="id" />
+			
+			<spring:bind path="participantes">
+			
+				<table class="table table-stripped table-hover table-bordered">
+					<c:if test="${status.error}">
+						
+						<caption>
+							<span class="label label-danger"> 
+								<i class="icon-exclamation"></i>
+							</span> 
+							<span class="help-inline text-danger">
+								${status.errorMessage}
+							</span>
+						</caption>
+					</c:if>
+					<tr>
+						<th>${episodioParticipantesForm.titulo}</th>
+					</tr>
+					
+					<c:forEach items="${listaDeParticipantes}" var="participante">
+						<tr class="left ${status.error ? 'danger' : '' }">
+							<td>
+								<form:checkbox path="participantes" value="${participante.id}" label=" ${participante.nome}"/>
+							</td>						
+						</tr>
+					</c:forEach>
+				</table>
+			</spring:bind>
 		
 		
 		</div>

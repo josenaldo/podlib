@@ -21,6 +21,10 @@
 		<hibernate.jpa.version>1.0.1.Final</hibernate.jpa.version>
 		<!-- Versão do Spring Data -->
 		<spring.data.version>1.3.4.RELEASE</spring.data.version>
+		<!-- Versão do log4j -->
+		<log4j.version>1.2.17</log4j.version>
+		<!-- Versão do SL4J -->
+		<sl4j.simple.version>1.6.6</sl4j.simple.version>
 		
 		<!-- Versão do C3P0 -->
 		<c3p0.version>0.9.1.2</c3p0.version>
@@ -159,5 +163,16 @@
 			<version>${hibernate.validator}</version>
 		</dependency>
 
+		<!-- Log4j -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${sl4j.simple.version}</version>
+		</dependency>
 	</dependencies>
 </project>

@@ -39,6 +39,12 @@ public class EpisodioServiceImpl implements EpisodioService {
 		return episodio;
 	}
 
+	public Episodio findEager(Long id) {
+		Episodio episodio = this.episodioRepository.findById(id);
+
+		return episodio;
+	}
+
 	public void delete(Long id) {
 		this.episodioRepository.delete(id);
 	}

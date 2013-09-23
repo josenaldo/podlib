@@ -43,7 +43,7 @@
 				class="btn btn-warning"> Editar
 			</a>
 				
-			<a href="${contextPath}/episodios/adicionar-remover-episodios/${participante.id}" class="btn btn-primary">
+			<a href="${contextPath}/episodios/adicionar?podcastId=${podcast.id}" class="btn btn-primary">
 				Adicionar episódio
 			</a>
 						

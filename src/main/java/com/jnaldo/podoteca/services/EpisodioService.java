@@ -12,6 +12,8 @@ public interface EpisodioService {
 
 	Episodio find(Long id);
 
+	Episodio findEager(Long id);
+
 	void delete(Long id);
 
 }

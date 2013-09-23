@@ -86,11 +86,12 @@ public class EpisodioController {
 			RedirectAttributes attr, ModelAndView modelAndView)
 			throws WebException {
 
-		Episodio episodio = this.episodioService.find(id);
+		Episodio episodio = this.episodioService.findEager(id);
 
 		if (episodio == null) {
 			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
 		} else {
+
 			modelAndView.addObject("episodio", episodio);
 			modelAndView.setViewName("episodio/visualizar");
 		}
@@ -179,26 +180,71 @@ public class EpisodioController {
 			RedirectAttributes attr, ModelAndView modelAndView)
 			throws WebException {
 
-		EpisodioParticipantesForm episodioParticipanteForm = new EpisodioParticipantesForm();
-		List<Participante> participantes = this.buscarParticipantes();
-		List<Episodio> episodios = this.buscarEpisodios();
+		EpisodioParticipantesForm episodioParticipantesForm = new EpisodioParticipantesForm();
+		List<Participante> listaDeParticipantes = this.buscarParticipantes();
 
 		Episodio episodio = this.buscarEpisodioSelecionado(id);
-		episodioParticipanteForm.setEpisodio(episodio);
 
-		modelAndView.addObject("participantes", participantes);
-		modelAndView.addObject("episodios", episodios);
+		episodioParticipantesForm.setParticipantes(episodio.getParticipantes());
+		episodioParticipantesForm.setId(id);
+		episodioParticipantesForm.setTitulo(episodio.getTitulo());
+
+		modelAndView.addObject("listaDeParticipantes", listaDeParticipantes);
+		// modelAndView.addObject("episodios", episodios);
 		modelAndView.addObject("episodioParticipantesForm",
-				episodioParticipanteForm);
+				episodioParticipantesForm);
 		modelAndView.setViewName("episodio/formulario_participantes");
 
 		return modelAndView;
 	}
 
-	@RequestMapping(value = "adicionar-remover-participantes", method = RequestMethod.POST)
-	public ModelAndView salvarParticipantes() throws WebException {
+	@RequestMapping(value = "adicionar-remover-participantes/{id}", method = RequestMethod.POST)
+	public ModelAndView salvarParticipantes(
+			@PathVariable("id") Long id,
+			@Valid @ModelAttribute("episodioParticipantesForm") EpisodioParticipantesForm episodioParticipantesForm,
+			BindingResult result, RedirectAttributes redirectAttributes,
+			ModelAndView modelAndView) throws WebException {
 
-		throw new WebException("Método não implementado");
+		if (result.hasErrors()) {
+
+			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+
+			List<Participante> listaDeParticipantes = this
+					.buscarParticipantes();
+			List<Episodio> episodios = this.buscarEpisodios();
+
+			Episodio episodio = this.buscarEpisodioSelecionado(id);
+
+			episodioParticipantesForm.setParticipantes(episodio
+					.getParticipantes());
+			episodioParticipantesForm.setId(id);
+			episodioParticipantesForm.setTitulo(episodio.getTitulo());
+
+			modelAndView
+					.addObject("listaDeParticipantes", listaDeParticipantes);
+			modelAndView.addObject("episodios", episodios);
+			modelAndView.addObject("episodioParticipantesForm",
+					episodioParticipantesForm);
+
+			modelAndView.setViewName("episodio/formulario_participantes");
+		} else {
+
+			Episodio episodio = this
+					.buscarEpisodioSelecionado(episodioParticipantesForm
+							.getId());
+			List<Participante> participantes = episodioParticipantesForm
+					.getParticipantes();
+
+			episodio.setParticipantes(participantes);
+
+			this.episodioService.save(episodio);
+
+			this.alerta.sucesso(redirectAttributes, Alerta.EPISODIO_SALVO);
+
+			modelAndView.setViewName("redirect:/episodios");
+		}
+
+		return modelAndView;
 
 	}
 
@@ -253,7 +299,7 @@ public class EpisodioController {
 			return null;
 		}
 
-		Episodio episodio = this.episodioService.find(episodioId);
+		Episodio episodio = this.episodioService.findEager(episodioId);
 
 		if (episodio == null) {
 			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);

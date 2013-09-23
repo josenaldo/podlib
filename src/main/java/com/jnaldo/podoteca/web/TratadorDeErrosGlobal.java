@@ -16,6 +16,8 @@ public class TratadorDeErrosGlobal {
 	@ExceptionHandler(Exception.class)
 	public ModelAndView handleWebException(Exception ex) {
 
+		ex.printStackTrace();
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("error");
 

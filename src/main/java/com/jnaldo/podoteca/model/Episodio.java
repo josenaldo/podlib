@@ -39,7 +39,7 @@ public class Episodio extends EntidadeBase {
 	private Podcast podcast;
 
 	@ManyToMany
-	@JoinTable(name = "participantes_episodios", joinColumns = { @JoinColumn(name = "episodio_id") }, inverseJoinColumns = { @JoinColumn(name = "participante_id") })
+	@JoinTable(name = "episodio_participante", joinColumns = { @JoinColumn(name = "episodio_id") }, inverseJoinColumns = { @JoinColumn(name = "participante_id") })
 	private List<Participante> participantes;
 
 	public String getTitulo() {
@@ -80,5 +80,15 @@ public class Episodio extends EntidadeBase {
 
 	public void setPodcast(Podcast podcast) {
 		this.podcast = podcast;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
 	}
 }
