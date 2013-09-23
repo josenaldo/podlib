@@ -15,14 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jnaldo.podoteca.business.exceptions.BusinessException;
+import com.jnaldo.podoteca.business.services.EpisodioService;
+import com.jnaldo.podoteca.business.services.ParticipanteService;
+import com.jnaldo.podoteca.business.services.PodcastService;
 import com.jnaldo.podoteca.model.Episodio;
 import com.jnaldo.podoteca.model.Participante;
 import com.jnaldo.podoteca.model.Podcast;
-import com.jnaldo.podoteca.services.EpisodioService;
-import com.jnaldo.podoteca.services.ParticipanteService;
-import com.jnaldo.podoteca.services.PodcastService;
 import com.jnaldo.podoteca.util.message.Alerta;
-import com.jnaldo.podoteca.web.exception.WebException;
+import com.jnaldo.podoteca.util.message.Messages;
 
 @Controller
 @RequestMapping("episodios")
@@ -41,7 +42,8 @@ public class EpisodioController {
 	private Alerta alerta;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listarEpisodios(ModelAndView modelAndView) {
+	public ModelAndView listarEpisodios(ModelAndView modelAndView)
+			throws BusinessException {
 
 		List<Episodio> episodios = this.episodioService.findAll();
 
@@ -55,13 +57,16 @@ public class EpisodioController {
 	public ModelAndView adicionarEpisodio(
 			@RequestParam(value = "podcastId", required = false) Long podcastId,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		Episodio episodio = new Episodio();
+		Podcast podcastSelecionado = null;
 
-		List<Podcast> podcasts = this.buscarPodcasts();
+		List<Podcast> podcasts = this.podcastService.findAll();
 
-		Podcast podcastSelecionado = this.buscarPodcastSelecionado(podcastId);
+		if (podcastId != null) {
+			podcastSelecionado = this.podcastService.find(podcastId);
+		}
 
 		episodio.setPodcast(podcastSelecionado);
 
@@ -76,7 +81,7 @@ public class EpisodioController {
 	public ModelAndView salvarEpisodio(
 			@Valid @ModelAttribute("episodio") Episodio episodio,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) throws WebException {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.salvar(episodio, result, attr, modelAndView);
 	}
@@ -84,17 +89,13 @@ public class EpisodioController {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView visualizarEpisodio(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
-		Episodio episodio = this.episodioService.findEager(id);
+		Episodio episodio = this.episodioService
+				.findEpisodioWithParticipantes(id);
 
-		if (episodio == null) {
-			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
-		} else {
-
-			modelAndView.addObject("episodio", episodio);
-			modelAndView.setViewName("episodio/visualizar");
-		}
+		modelAndView.addObject("episodio", episodio);
+		modelAndView.setViewName("episodio/visualizar");
 
 		return modelAndView;
 	}
@@ -102,19 +103,15 @@ public class EpisodioController {
 	@RequestMapping("{id}/editar")
 	public ModelAndView editarEpisodio(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		Episodio episodio = this.episodioService.find(id);
 
-		List<Podcast> podcasts = this.buscarPodcasts();
+		List<Podcast> podcasts = this.podcastService.findAll();
 
-		if (episodio == null) {
-			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
-		} else {
-			modelAndView.addObject("podcasts", podcasts);
-			modelAndView.addObject("episodio", episodio);
-			modelAndView.setViewName("episodio/formulario");
-		}
+		modelAndView.addObject("podcasts", podcasts);
+		modelAndView.addObject("episodio", episodio);
+		modelAndView.setViewName("episodio/formulario");
 
 		return modelAndView;
 	}
@@ -123,7 +120,7 @@ public class EpisodioController {
 	public ModelAndView atualizarEpisodio(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("episodio") Episodio episodio,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) throws WebException {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.salvar(episodio, result, attr, modelAndView);
 
@@ -132,18 +129,14 @@ public class EpisodioController {
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ModelAndView removerEpisodio(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
-		Episodio episodio = this.episodioService.find(id);
+		this.episodioService.find(id);
 
-		if (episodio == null) {
-			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
-		} else {
-			this.episodioService.delete(id);
+		this.episodioService.delete(id);
 
-			this.alerta.sucesso(attr, Alerta.EPISODIO_APAGADO);
+		this.alerta.sucesso(attr, Messages.EPISODIO_APAGADO);
 
-		}
 		modelAndView.setViewName("redirect:/episodios");
 
 		return modelAndView;
@@ -152,13 +145,13 @@ public class EpisodioController {
 
 	private ModelAndView salvar(Episodio episodio, BindingResult result,
 			RedirectAttributes redirectAttributes, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		if (result.hasErrors()) {
 
-			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+			this.alerta.erro(modelAndView, Messages.ERROS_NO_FORMULARIO);
 
-			List<Podcast> podcasts = this.buscarPodcasts();
+			List<Podcast> podcasts = this.podcastService.findAll();
 
 			modelAndView.addObject("podcasts", podcasts);
 			modelAndView.addObject("episodio", episodio);
@@ -167,7 +160,7 @@ public class EpisodioController {
 
 			this.episodioService.save(episodio);
 
-			this.alerta.sucesso(redirectAttributes, Alerta.EPISODIO_SALVO);
+			this.alerta.sucesso(redirectAttributes, Messages.EPISODIO_SALVO);
 
 			modelAndView.setViewName("redirect:/episodios");
 		}
@@ -178,19 +171,20 @@ public class EpisodioController {
 	@RequestMapping(value = "adicionar-remover-participantes/{id}", method = RequestMethod.GET)
 	public ModelAndView adicionarParticipantes(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		EpisodioParticipantesForm episodioParticipantesForm = new EpisodioParticipantesForm();
-		List<Participante> listaDeParticipantes = this.buscarParticipantes();
+		List<Participante> listaDeParticipantes = this.participanteService
+				.findAll();
 
-		Episodio episodio = this.buscarEpisodioSelecionado(id);
+		Episodio episodio = this.episodioService
+				.findEpisodioWithParticipantes(id);
 
 		episodioParticipantesForm.setParticipantes(episodio.getParticipantes());
 		episodioParticipantesForm.setId(id);
 		episodioParticipantesForm.setTitulo(episodio.getTitulo());
 
 		modelAndView.addObject("listaDeParticipantes", listaDeParticipantes);
-		// modelAndView.addObject("episodios", episodios);
 		modelAndView.addObject("episodioParticipantesForm",
 				episodioParticipantesForm);
 		modelAndView.setViewName("episodio/formulario_participantes");
@@ -203,17 +197,18 @@ public class EpisodioController {
 			@PathVariable("id") Long id,
 			@Valid @ModelAttribute("episodioParticipantesForm") EpisodioParticipantesForm episodioParticipantesForm,
 			BindingResult result, RedirectAttributes redirectAttributes,
-			ModelAndView modelAndView) throws WebException {
+			ModelAndView modelAndView) throws BusinessException {
 
 		if (result.hasErrors()) {
 
-			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+			this.alerta.erro(modelAndView, Messages.ERROS_NO_FORMULARIO);
 
-			List<Participante> listaDeParticipantes = this
-					.buscarParticipantes();
-			List<Episodio> episodios = this.buscarEpisodios();
+			List<Participante> listaDeParticipantes = this.participanteService
+					.findAll();
 
-			Episodio episodio = this.buscarEpisodioSelecionado(id);
+			List<Episodio> episodios = this.episodioService.findAll();
+
+			Episodio episodio = this.episodioService.find(id);
 
 			episodioParticipantesForm.setParticipantes(episodio
 					.getParticipantes());
@@ -229,9 +224,8 @@ public class EpisodioController {
 			modelAndView.setViewName("episodio/formulario_participantes");
 		} else {
 
-			Episodio episodio = this
-					.buscarEpisodioSelecionado(episodioParticipantesForm
-							.getId());
+			Episodio episodio = this.episodioService
+					.find(episodioParticipantesForm.getId());
 			List<Participante> participantes = episodioParticipantesForm
 					.getParticipantes();
 
@@ -239,73 +233,12 @@ public class EpisodioController {
 
 			this.episodioService.save(episodio);
 
-			this.alerta.sucesso(redirectAttributes, Alerta.EPISODIO_SALVO);
+			this.alerta.sucesso(redirectAttributes, Messages.EPISODIO_SALVO);
 
 			modelAndView.setViewName("redirect:/episodios");
 		}
 
 		return modelAndView;
-
-	}
-
-	private List<Podcast> buscarPodcasts() throws WebException {
-		List<Podcast> podcasts = this.podcastService.findAll();
-
-		if (podcasts.isEmpty()) {
-			throw new WebException(Alerta.PODCAST_LISTA_VAZIA);
-		}
-
-		return podcasts;
-	}
-
-	private List<Episodio> buscarEpisodios() throws WebException {
-		List<Episodio> episodios = this.episodioService.findAll();
-
-		if (episodios.isEmpty()) {
-			throw new WebException(Alerta.EPISODIO_LISTA_VAZIA);
-		}
-
-		return episodios;
-	}
-
-	private List<Participante> buscarParticipantes() throws WebException {
-		List<Participante> participantes = this.participanteService.findAll();
-
-		if (participantes.isEmpty()) {
-			throw new WebException(Alerta.PARTICIPANTE_LISTA_VAZIA);
-		}
-
-		return participantes;
-	}
-
-	private Podcast buscarPodcastSelecionado(Long podcastId)
-			throws WebException {
-		if (podcastId == null) {
-			return null;
-		}
-
-		Podcast podcast = this.podcastService.find(podcastId);
-
-		if (podcast == null) {
-			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
-		}
-
-		return podcast;
-	}
-
-	private Episodio buscarEpisodioSelecionado(Long episodioId)
-			throws WebException {
-		if (episodioId == null) {
-			return null;
-		}
-
-		Episodio episodio = this.episodioService.findEager(episodioId);
-
-		if (episodio == null) {
-			throw new WebException(Alerta.EPISODIO_NAO_ENCONTRADO);
-		}
-
-		return episodio;
 
 	}
 

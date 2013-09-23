@@ -16,7 +16,7 @@
 	<context:annotation-config />
 
 	<!-- Configuração do spring data -->
-	<jpa:repositories base-package="com.jnaldo.podoteca.repository" />
+	<jpa:repositories base-package="com.jnaldo.podoteca.business.repository" />
 
 	<!-- Configuração do JPA -->
 	<bean id="entityManagerFactory"

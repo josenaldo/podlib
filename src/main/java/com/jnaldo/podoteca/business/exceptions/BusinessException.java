@@ -1,25 +1,25 @@
-package com.jnaldo.podoteca.web.exception;
+package com.jnaldo.podoteca.business.exceptions;
 
-public class WebException extends Exception {
+public class BusinessException extends Exception {
 
 	private static final long serialVersionUID = 5390372089094233082L;
 
-	public WebException() {
+	public BusinessException() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public WebException(String message, Throwable cause) {
+	public BusinessException(String message, Throwable cause) {
 		super(message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
-	public WebException(String message) {
+	public BusinessException(String message) {
 		super(message);
 		// TODO Auto-generated constructor stub
 	}
 
-	public WebException(Throwable cause) {
+	public BusinessException(Throwable cause) {
 		super(cause);
 		// TODO Auto-generated constructor stub
 	}

@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.jnaldo.podoteca.business.exceptions.BusinessException;
+import com.jnaldo.podoteca.business.services.ParticipanteService;
 import com.jnaldo.podoteca.model.Participante;
-import com.jnaldo.podoteca.services.ParticipanteService;
 
 @Component("stringToParticipanteConverter")
 public class StringToParticipanteConverter implements
@@ -30,6 +31,8 @@ public class StringToParticipanteConverter implements
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(
 					"Valor não é um id de participante válido", e);
+		} catch (BusinessException e) {
+			throw new IllegalStateException(e);
 		}
 
 		return participante;

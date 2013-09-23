@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jnaldo.podoteca.business.exceptions.BusinessException;
+import com.jnaldo.podoteca.business.services.PodcastService;
 import com.jnaldo.podoteca.model.Podcast;
-import com.jnaldo.podoteca.services.PodcastService;
 import com.jnaldo.podoteca.util.message.Alerta;
-import com.jnaldo.podoteca.web.exception.WebException;
+import com.jnaldo.podoteca.util.message.Messages;
 
 @Controller
 @RequestMapping("podcasts")
@@ -30,9 +31,11 @@ public class PodcastController {
 	private Alerta alerta;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listarPodcasts(ModelAndView modelAndView) {
+	public ModelAndView listarPodcasts(ModelAndView modelAndView)
+			throws BusinessException {
 
-		List<Podcast> podcasts = this.podcastService.findAll();
+		List<Podcast> podcasts = this.podcastService
+				.findAllPodcastsWithEpisodios();
 
 		modelAndView.setViewName("podcast/listar");
 		modelAndView.addObject("podcasts", podcasts);
@@ -54,7 +57,7 @@ public class PodcastController {
 	public ModelAndView salvarPodcast(
 			@Valid @ModelAttribute("podcast") Podcast podcast,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.savePodcast(podcast, result, attr, modelAndView);
 	}
@@ -62,16 +65,12 @@ public class PodcastController {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView visualizarPodcast(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
-		Podcast podcast = this.podcastService.find(id);
+		Podcast podcast = this.podcastService.findPodcastWithEpisodios(id);
 
-		if (podcast == null) {
-			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
-		} else {
-			modelAndView.addObject("podcast", podcast);
-			modelAndView.setViewName("podcast/visualizar");
-		}
+		modelAndView.addObject("podcast", podcast);
+		modelAndView.setViewName("podcast/visualizar");
 
 		return modelAndView;
 	}
@@ -79,16 +78,12 @@ public class PodcastController {
 	@RequestMapping("{id}/editar")
 	public ModelAndView editarPodcast(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		Podcast podcast = this.podcastService.find(id);
 
-		if (podcast == null) {
-			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
-		} else {
-			modelAndView.addObject("podcast", podcast);
-			modelAndView.setViewName("podcast/formulario");
-		}
+		modelAndView.addObject("podcast", podcast);
+		modelAndView.setViewName("podcast/formulario");
 
 		return modelAndView;
 	}
@@ -97,7 +92,7 @@ public class PodcastController {
 	public ModelAndView atualizarPodcast(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("podcast") Podcast podcast,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.savePodcast(podcast, result, attr, modelAndView);
 
@@ -106,18 +101,14 @@ public class PodcastController {
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ModelAndView removerPodcast(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
-		Podcast podcast = this.podcastService.find(id);
+		this.podcastService.find(id);
 
-		if (podcast == null) {
-			throw new WebException(Alerta.PODCAST_NAO_ENCONTRADO);
-		} else {
-			this.podcastService.delete(id);
+		this.podcastService.delete(id);
 
-			this.alerta.sucesso(attr, Alerta.PODCAST_APAGADO);
+		this.alerta.sucesso(attr, Messages.PODCAST_APAGADO);
 
-		}
 		modelAndView.setViewName("redirect:/podcasts");
 
 		return modelAndView;
@@ -125,11 +116,12 @@ public class PodcastController {
 	}
 
 	private ModelAndView savePodcast(Podcast podcast, BindingResult result,
-			RedirectAttributes attr, ModelAndView modelAndView) {
+			RedirectAttributes attr, ModelAndView modelAndView)
+			throws BusinessException {
 
 		if (result.hasErrors()) {
 
-			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+			this.alerta.erro(modelAndView, Messages.ERROS_NO_FORMULARIO);
 
 			modelAndView.addObject("podcast", podcast);
 			modelAndView.setViewName("podcast/formulario");
@@ -137,7 +129,7 @@ public class PodcastController {
 
 			this.podcastService.save(podcast);
 
-			this.alerta.sucesso(attr, Alerta.PODCAST_SALVO);
+			this.alerta.sucesso(attr, Messages.PODCAST_SALVO);
 
 			modelAndView.setViewName("redirect:/podcasts");
 		}

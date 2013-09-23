@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
+import com.jnaldo.podoteca.business.exceptions.BusinessException;
+import com.jnaldo.podoteca.business.services.PodcastService;
 import com.jnaldo.podoteca.model.Podcast;
-import com.jnaldo.podoteca.services.PodcastService;
 
 @Component("stringToPodcastConverter")
 public class StringToPodcastConverter implements Converter<String, Podcast> {
@@ -28,6 +29,8 @@ public class StringToPodcastConverter implements Converter<String, Podcast> {
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException(
 					"Valor não é um id de podcast válido", e);
+		} catch (BusinessException e) {
+			throw new IllegalStateException(e);
 		}
 
 		return podcast;

@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.jnaldo.podoteca.business.exceptions.BusinessException;
+import com.jnaldo.podoteca.business.services.ParticipanteService;
 import com.jnaldo.podoteca.model.Participante;
-import com.jnaldo.podoteca.services.ParticipanteService;
 import com.jnaldo.podoteca.util.message.Alerta;
-import com.jnaldo.podoteca.web.exception.WebException;
+import com.jnaldo.podoteca.util.message.Messages;
 
 @Controller
 @RequestMapping("participantes")
@@ -30,7 +31,8 @@ public class ParticipanteController {
 	private Alerta alerta;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ModelAndView listarParticipantes(ModelAndView modelAndView) {
+	public ModelAndView listarParticipantes(ModelAndView modelAndView)
+			throws BusinessException {
 
 		List<Participante> participantes = this.participanteService.findAll();
 
@@ -54,7 +56,7 @@ public class ParticipanteController {
 	public ModelAndView salvarParticipante(
 			@Valid @ModelAttribute("participante") Participante participante,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.saveParticipante(participante, result, attr, modelAndView);
 	}
@@ -62,16 +64,12 @@ public class ParticipanteController {
 	@RequestMapping(value = "{id}", method = RequestMethod.GET)
 	public ModelAndView visualizarParticipante(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		Participante participante = this.participanteService.find(id);
 
-		if (participante == null) {
-			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
-		} else {
-			modelAndView.addObject("participante", participante);
-			modelAndView.setViewName("participante/visualizar");
-		}
+		modelAndView.addObject("participante", participante);
+		modelAndView.setViewName("participante/visualizar");
 
 		return modelAndView;
 	}
@@ -79,16 +77,12 @@ public class ParticipanteController {
 	@RequestMapping("{id}/editar")
 	public ModelAndView editarParticipante(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
 		Participante participante = this.participanteService.find(id);
 
-		if (participante == null) {
-			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
-		} else {
-			modelAndView.addObject("participante", participante);
-			modelAndView.setViewName("participante/formulario");
-		}
+		modelAndView.addObject("participante", participante);
+		modelAndView.setViewName("participante/formulario");
 
 		return modelAndView;
 	}
@@ -97,7 +91,7 @@ public class ParticipanteController {
 	public ModelAndView atualizarParticipante(@PathVariable("id") Long id,
 			@Valid @ModelAttribute("participante") Participante participante,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws BusinessException {
 
 		return this.saveParticipante(participante, result, attr, modelAndView);
 
@@ -106,18 +100,14 @@ public class ParticipanteController {
 	@RequestMapping(value = "{id}", method = RequestMethod.DELETE)
 	public ModelAndView removerParticipante(@PathVariable("id") Long id,
 			RedirectAttributes attr, ModelAndView modelAndView)
-			throws WebException {
+			throws BusinessException {
 
-		Participante participante = this.participanteService.find(id);
+		this.participanteService.find(id);
 
-		if (participante == null) {
-			throw new WebException(Alerta.PARTICIPANTE_NAO_ENCONTRADO);
-		} else {
-			this.participanteService.delete(id);
+		this.participanteService.delete(id);
 
-			this.alerta.sucesso(attr, Alerta.PARTICIPANTE_APAGADO);
+		this.alerta.sucesso(attr, Messages.PARTICIPANTE_APAGADO);
 
-		}
 		modelAndView.setViewName("redirect:/participantes");
 
 		return modelAndView;
@@ -126,11 +116,11 @@ public class ParticipanteController {
 
 	private ModelAndView saveParticipante(Participante participante,
 			BindingResult result, RedirectAttributes attr,
-			ModelAndView modelAndView) {
+			ModelAndView modelAndView) throws BusinessException {
 
 		if (result.hasErrors()) {
 
-			this.alerta.erro(modelAndView, Alerta.ERROS_NO_FORMULARIO);
+			this.alerta.erro(modelAndView, Messages.ERROS_NO_FORMULARIO);
 
 			modelAndView.addObject("participante", participante);
 			modelAndView.setViewName("participante/formulario");
@@ -138,7 +128,7 @@ public class ParticipanteController {
 
 			this.participanteService.save(participante);
 
-			this.alerta.sucesso(attr, Alerta.PARTICIPANTE_SALVO);
+			this.alerta.sucesso(attr, Messages.PARTICIPANTE_SALVO);
 
 			modelAndView.setViewName("redirect:/participantes");
 		}
