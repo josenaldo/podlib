@@ -1,10 +1,33 @@
 package com.jnaldo.podoteca.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
+@Entity
+@Table(name = "participante")
 public class Participante extends EntidadeBase {
 
+	@NotEmpty
+	@Length(min = 3, max = 255)
+	@Column(name = "nome")
 	private String nome;
+
+	@Email
+	@Length(max = 255)
+	@Column(name = "email")
 	private String email;
+
+	@Length(max = 255)
+	@Column(name = "apelido")
 	private String apelido;
+
+	@Length(max = 255)
+	@Column(name = "twitter")
 	private String twitter;
 
 	public String getNome() {
@@ -39,4 +62,13 @@ public class Participante extends EntidadeBase {
 		this.twitter = twitter;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }
