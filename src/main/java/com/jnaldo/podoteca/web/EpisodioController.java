@@ -24,6 +24,7 @@ import com.jnaldo.podoteca.model.Participante;
 import com.jnaldo.podoteca.model.Podcast;
 import com.jnaldo.podoteca.util.message.Alerta;
 import com.jnaldo.podoteca.util.message.Messages;
+import com.jnaldo.podoteca.web.form.EpisodioParticipantesForm;
 
 @Controller
 @RequestMapping("episodios")
@@ -208,7 +209,8 @@ public class EpisodioController {
 
 			List<Episodio> episodios = this.episodioService.findAll();
 
-			Episodio episodio = this.episodioService.find(id);
+			Episodio episodio = this.episodioService
+					.findEpisodioWithParticipantes(id);
 
 			episodioParticipantesForm.setParticipantes(episodio
 					.getParticipantes());

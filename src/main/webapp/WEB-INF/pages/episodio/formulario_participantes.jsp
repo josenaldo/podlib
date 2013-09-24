@@ -32,35 +32,32 @@
 			
 		
 			<form:hidden path="id" />
+			<form:hidden path="titulo" />
 			
 			<spring:bind path="participantes">
-			
-				<table class="table table-stripped table-hover table-bordered">
-					<c:if test="${status.error}">
+				<h3>${episodioParticipantesForm.titulo}</h3>
 						
-						<caption>
-							<span class="label label-danger"> 
-								<i class="icon-exclamation"></i>
-							</span> 
-							<span class="help-inline text-danger">
-								${status.errorMessage}
-							</span>
-						</caption>
-					</c:if>
-					<tr>
-						<th>${episodioParticipantesForm.titulo}</th>
-					</tr>
-					
-					<c:forEach items="${listaDeParticipantes}" var="participante">
-						<tr class="left ${status.error ? 'danger' : '' }">
-							<td>
-								<form:checkbox path="participantes" value="${participante.id}" label=" ${participante.nome}"/>
-							</td>						
-						</tr>
-					</c:forEach>
-				</table>
+				<c:if test="${status.error}">
+					<p class="text-danger">
+						<span class="label label-danger">
+							<i class="icon-exclamation"></i>
+						</span>
+						&nbsp; 
+						<span class="help-inline text-danger">
+							${status.errorMessage}
+						</span>
+					</p>
+				</c:if>
+				
+				<ul class="list-group left ${status.error ? 'danger' : '' }">
+					<form:checkboxes path="participantes"
+					items="${listaDeParticipantes}" 
+					itemLabel="nome" 
+					itemValue="id"					
+					element="li class='list-group-item'" 
+					/>													
+				</ul>					
 			</spring:bind>
-		
 		
 		</div>
 		<div class="panel-footer right">			

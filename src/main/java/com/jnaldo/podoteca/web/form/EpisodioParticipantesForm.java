@@ -1,4 +1,4 @@
-package com.jnaldo.podoteca.web;
+package com.jnaldo.podoteca.web.form;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public class EpisodioParticipantesForm {
 
 	private String titulo;
 
-	@NotEmpty
+	@NotEmpty(message = "Ao menos um participante deve ser escolhido")
 	private List<Participante> participantes;
 
 	public Long getId() {
