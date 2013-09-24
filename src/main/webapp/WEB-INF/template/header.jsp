@@ -42,7 +42,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="${contextPath}">Podoteca</a>
+			<a class="navbar-brand" href="${contextPath}/">Podoteca</a>
 		</div>
 
 		<div class="collapse navbar-collapse navbar-ex1-collapse">					
@@ -74,20 +74,6 @@
 		</div>
 	</nav>
 </header>
-
-<c:if test="${not empty mensagem}">
-<div class="row-container" >
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-6 col-lg-offset-3 vspace10 alert-top">
-				<div class="alert alert-${tipoDaMensagem}">					
-					${mensagem}
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-</c:if>
 
 <div class="row-container">
 	<div class="container column-center">

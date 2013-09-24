@@ -2,15 +2,34 @@ body {
 	padding-bottom: 50px;
 }
 
-.dashboard-item i{
+.dashboard-item i {
 	font-size: 128px;
 }
 
- .dashboard-link, .dashboard-link:hover {
- 	text-decoration: none;
- }
- 
- .form-panel {
- 	width: 50%;
- 	margin: auto;
- }
+.dashboard-link,.dashboard-link:hover {
+	text-decoration: none;
+}
+
+.form-panel {
+	width: 50%;
+	margin: auto;
+}
+
+.btn-back i {
+	font-size: 50px;
+}
+
+.break-column{
+	word-wrap: break-word;
+	max-width: 200px;
+}
+
+.buttom-column {
+	width: 60px;	
+}
+
+.list-group.danger .list-group-item {
+	border-color: #b94a48;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
